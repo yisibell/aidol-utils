@@ -1,4 +1,4 @@
-# aidol-utils
+# @aidol/utils
 
 # Installation
 

@@ -1,5 +1,5 @@
 {
-  "name": "aidol-utils",
+  "name": "@aidol/utils",
   "version": "1.0.0",
   "description": "a javascript tool",
   "main": "src/index.js",
