@@ -1,0 +1,27 @@
+{
+  "name": "aidol-utils",
+  "version": "1.0.0",
+  "description": "a javascript tool",
+  "main": "src/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yisibell/aidol-utils.git"
+  },
+  "keywords": [
+    "aidol",
+    "aidol-utils",
+    "tool"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yisibell/aidol-utils/issues"
+  },
+  "homepage": "https://github.com/yisibell/aidol-utils#readme"
+}
