@@ -3,7 +3,7 @@
 *@date: 2020-03-18
 *@desc: 分页生成器函数
 */
-export default (
+const paging = (
   origin , // 源数据
   { // 分页参数
     currentPage, // 当前页码
@@ -79,3 +79,5 @@ export default (
 
 
 }
+
+export default paging

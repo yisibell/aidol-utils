@@ -18,7 +18,10 @@
     "aidol-utils",
     "tool"
   ],
-  "author": "",
+  "author": {
+    "email": "yisiwings@163.com",
+    "name": "elenh"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/yisibell/aidol-utils/issues"
