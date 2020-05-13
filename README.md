@@ -3,7 +3,7 @@
 # Installation
 
 ``` bash
-$ npm i @aidol/utils --S
+$ npm i @aidol/utils -S
 ```
 
 # Usage
