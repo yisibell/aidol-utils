@@ -6,7 +6,7 @@
  *@param {Object} o2
  *@return {Boolean}
  */
-export default isEqualObject = (o1, o2) => {
+export default function isEqualObject(o1, o2){
   const o1_keys = Object.keys(o1).sort()
   const o2_keys = Object.keys(o2).sort()
 
