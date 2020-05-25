@@ -1,18 +1,22 @@
 /**
-*@author: hongwenqing
-*@date: 2020-03-18
-*@desc: 分页生成器函数
-*/
+ * 分页器
+ *@author hongwenqing(elenh)
+ *@date 2019-02-14
+ *@param {Array of Object} origin 源数据
+ *@param {Object} currentPage: 当前页 pageSize: 每页条数
+ *@param {Array of Object} condition 过滤条件
+ *@return {Object} total: 总条数 data: 当前页数据
+ */
 const paging = (
-  origin , // 源数据
-  { // 分页参数
-    currentPage, // 当前页码
-    pageSize // 每页条数
+  origin,
+  {
+    currentPage,
+    pageSize
   } = {
     currentPage: 0,
     pageSize: 0,
   },
-  condition // 过滤条件
+  condition
 
 ) => {
 

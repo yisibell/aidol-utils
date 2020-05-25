@@ -14,6 +14,10 @@ $ npm i @aidol/utils -S
 4. **getType** 数据类型获取函数。
 5. **dom** 实用 Dom 操作工具类。
 6. **ws** 适用于 vue 项目的 WebSocket 客户端服务。
+7. **cartesianOf** 笛卡尔积生成函数。
+8. **cartesianToTable** 笛卡尔积转换为 Array of Object。
+9. **copyToClibboard** 复制文本至系统剪切板。
+10. **isEqualObject** 对象判等（以键-值为维度）。
 
 
 # Usage

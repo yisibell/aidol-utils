@@ -4,6 +4,10 @@ import calc from './libs/calc'
 import getType from './libs/getType'
 import dom from './libs/dom'
 import ws from './libs/ws'
+import isEqualObject from './libs/isEqualObject'
+import cartesianOf from './libs/cartesianOf'
+import cartesianToTable from './libs/cartesianToTable'
+import copyToClibboard from './libs/copyToClibboard'
 
 export {
   paging,
@@ -11,5 +15,9 @@ export {
   calc,
   getType,
   dom,
-  ws
+  ws,
+  isEqualObject,
+  cartesianOf,
+  cartesianToTable,
+  copyToClibboard
 }
