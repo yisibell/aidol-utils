@@ -8,6 +8,7 @@ import isEqualObject from './libs/isEqualObject'
 import cartesianOf from './libs/cartesianOf'
 import cartesianToTable from './libs/cartesianToTable'
 import copyToClibboard from './libs/copyToClibboard'
+import get from './libs/get'
 
 export {
   paging,
@@ -19,5 +20,6 @@ export {
   isEqualObject,
   cartesianOf,
   cartesianToTable,
-  copyToClibboard
+  copyToClibboard,
+  get
 }

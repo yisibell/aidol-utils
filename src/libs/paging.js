@@ -1,9 +1,10 @@
+import get from './get'
 /**
  * 分页器
  *@author hongwenqing(elenh)
  *@date 2019-02-14
  *@param {Array of Object} origin 源数据
- *@param {Object} currentPage: 当前页 pageSize: 每页条数
+ *@param {Object} currentPage 当前页, pageSize 每页条数
  *@param {Array of Object} condition 过滤条件
  *@return {Object} total: 总条数 data: 当前页数据
  */
@@ -44,19 +45,25 @@ const paging = (
 
       for (let k in validMap) {
         if (validMap.hasOwnProperty(k)) {
-          const curr = condition.find(v => v.key === k )  // 某条件信息对象
-          
+          const curr_condition_o = condition.find(v => v.key === k )  // 某条件信息对象
+          const curr_condition_o_val = curr_condition_o.value
+          const ori_val = get(ori, k)
+
           /* 匹配方式 S */
-          if (curr.daterange) {  // 1.日期范围
-            const start = +new Date( curr.value ? curr.value[0] : 0 )
-            const end = +new Date( curr.value ? curr.value[1] : 0 )
-            const now = +new Date( ori[k] )
+          if (curr_condition_o.daterange) {  // 1.日期范围
+            const start = +new Date(curr_condition_o_val ? curr_condition_o_val[0] : 0)
+            const end = +new Date(curr_condition_o_val ? curr_condition_o_val[1] : 0)
+            const now = +new Date(ori_val)
 
             validMap[k] = (start <= now && end >= now) || !start
-          } else if (curr.validHandler) { // 2.自定义校验
-            validMap[k] = curr.validHandler(curr.value, ori[k])
+          } else if (curr_condition_o.validHandler) { // 2.自定义校验
+            validMap[k] = curr_condition_o.validHandler(curr_condition_o_val, ori_val)
           } else {  // 3.模糊、全匹配
-            validMap[k] = (curr.fuzzy ? ori[k].search( curr.value ) !== -1 : ori[k] == curr.value) || curr.value == ''
+            const fuzzy_ori_val = ori_val.toLowerCase ? ori_val.toLowerCase() : ori_val
+            const fuzzy_curr_condition_o_val = curr_condition_o_val.toLowerCase ? curr_condition_o_val.toLowerCase() : curr_condition_o_val
+
+            validMap[k] = (curr_condition_o.fuzzy ? fuzzy_ori_val.search( fuzzy_curr_condition_o_val ) !== -1 : ori_val == curr_condition_o_val
+            ) || curr_condition_o_val == ''
           }
           /* 匹配方式 E */
         }

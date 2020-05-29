@@ -18,6 +18,7 @@ $ npm i @aidol/utils -S
 8. **cartesianToTable** 笛卡尔积转换为 Array of Object。
 9. **copyToClibboard** 复制文本至系统剪切板。
 10. **isEqualObject** 对象判等（以键-值为维度）。
+11. **get** 根据 object 对象的 path 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
 
 
 # Usage
@@ -30,9 +31,16 @@ $ npm i @aidol/utils -S
 // 使用分页工具函数
 import { paging } from '@aidol/utils'
 
-const ori = []
+const ori = [
+  { a: { b: 'bar'} },
+  { a: { b: 'fooo'} },
+  { a: { b: 'foo'} },
+  { a: { b: 'foo2'} }
+]
 
-const condition = []
+const condition = [
+  { key: 'a.b', value: 'foo', fuzzy: true }
+]
 
 const { total, data } = paging(ori, {currentPage: 1, pageSize: 10}, condition)
 

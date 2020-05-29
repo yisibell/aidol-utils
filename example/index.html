@@ -6,6 +6,70 @@
   <title> Test </title>
 </head>
 <body>
+
+  <script>
+
+    function get(obj, path, defaultValue) {
+      let res = obj
+      let path_arr = []
+      
+      // 生成属性路径数组
+      if (Array.isArray(path)) {
+        path_arr = path
+      } else {
+        let keys = []
+        try {
+          keys = path.split('.')
+        } catch(err) {
+          throw new Error('path must be a String.')
+          return
+        }
+        keys.forEach(str => {
+        let arr = []
+        const first_prop = str.match(/^(\w+)\[?/)
+        const index_arr = str.match(/\[(\d)\]+/g)
+
+        if (Array.isArray(first_prop) && first_prop.length > 1) {
+          arr.push(first_prop[1])
+        }
+
+        if (Array.isArray(index_arr)) {
+          arr = arr.concat(index_arr.map(v => {
+              const num = v.match(/\[(\d)+\]/)
+              return Number.parseInt(num[1])
+            })
+          )
+        }
+
+        path_arr = path_arr.concat(arr)
+        
+      })
+      }
+  
+      // 生成结果
+      path_arr.forEach(key => {
+        res = res[key]
+      })
+
+      return typeof res === 'undefined' ? defaultValue : res
+    }
+
+    console.log( get(
+      {a: [[{}, [{b: 'yep'}]]]}, 
+      'a[0][1][0].b'
+    ))
+
+    console.log( get(
+      {a: [[{}, [{b: 'yep'}]]]}, 
+      ['a', 0, 1, 0, 'b']
+    ))
+
+    console.log( get(
+      {a: [[{}, [{b: 'yep'}]]]}, 
+      null
+    ))
+
+  </script>
   
 </body>
 </html>
