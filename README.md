@@ -12,13 +12,13 @@ $ npm i @aidol/utils -S
 2. **deepClone** 引用类型深拷贝。
 3. **calc** 避免 `javascript` 小数计算精度丢失工具类。
 4. **getType** 数据类型获取函数。
-5. **dom** 实用 Dom 操作工具类。
-6. **ws** 适用于 vue 项目的 WebSocket 客户端服务。
+5. **dom** 实用 `Dom` 操作工具类。
+6. **ws** 适用于 `vue` 项目的 `WebSocket` 客户端服务。
 7. **cartesianOf** 笛卡尔积生成函数。
-8. **cartesianToTable** 笛卡尔积转换为 Array of Object。
+8. **cartesianToTable** 笛卡尔积转换为 `Array of Object`。
 9. **copyToClibboard** 复制文本至系统剪切板。
 10. **isEqualObject** 对象判等（以键-值为维度）。
-11. **get** 根据 object 对象的 path 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
+11. **get**  根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
 
 
 # Usage
@@ -27,24 +27,133 @@ $ npm i @aidol/utils -S
 
 分页查询工具函数。
 
+### 参数
+
+1. **ori {array of object}**： 源数据（必需）。
+
+2. **options {object}**： 配置（不启用分页时可不传，或传入 `{}`）。
+
 ``` js
-// 使用分页工具函数
+{
+  currentPage: 1, // 当前页码
+  pageSize: 10 // 每页条数
+}
+```
+
+3. **condition {array of object}**： 查询条件。
+
+### 返回
+
+**{object}**：返回一个查询结果对象。
+
+``` js
+{
+  total, // 查询结果总条数
+  originTotal, // 源数据总条数
+  data, // 查询结果
+  currentPage, // 当前页码
+  pageSize // 当前页数据条数
+}
+```
+
+### 基本使用
+
+1. 不启用分页，按条件查询。
+
+``` js
+import { paging } from '@aidol/utils'
+
+// 源数据
+const ori = [
+  { a: 'bar' },
+  { a: 'bar2' },
+  { a: 'foo' },
+  { a: 'foo2' }
+]
+
+// 查询条件
+const condition = [
+  { key: 'a', value: 'foo' }
+]
+
+const { total, data } = paging(ori, {}, condition)
+
+console.log(total) // 查询结果总条数，1
+console.log(data) // 查询结果, [{ a: 'foo' }]
+```
+
+2. 启用分页，按条件查询。
+
+``` js
+import { paging } from '@aidol/utils'
+
+// 源数据
+const ori = [
+  { a: 'bar' },
+  { a: 'bar2' },
+  { a: 'foo' },
+  { a: 'foo2' },
+  { a: 'foo2' },
+  { a: 'foo2' },
+  { a: 'foo' },
+  { a: 'foo' }
+]
+
+// 查询条件
+const condition = [
+  { key: 'a', value: 'foo' }
+]
+
+const { total, data } = paging(ori, { currentPage: 1, pageSize: 2 }, condition)
+
+console.log(total) // 查询结果总条数，3
+console.log(data) // 查询结果, [{ a: 'foo' }, { a: 'foo' }]
+```
+
+### condition 条件
+
+`condition` 作为 `paging` 的第三个参数，表示查询条件，可选。
+
+``` js
+const condition = [
+  {
+    // 检索字段、属性键名（必需）。
+    key: 'a', 
+    // 当前检索值（必需）。
+    value: '', 
+    // 是否启用模糊搜索
+    // 当前启用该字段时，将不会区分大小写，只要被检索值中存在 value 即被匹配成功。
+    fuzzy: false, 
+    // 是否对该字段启用日期范围检索
+    // 设置了该属性为 true 后，value 的格式需为 [2019-02-13, 2020-02-14]，两个值可以被 new Date() 解析即可。
+    daterange: false, 
+    // 自定义检索方法，该方法被传入两个参数：`con`（当前条件字段值，即 value ），`val`（源数据中对应字段值）。
+    validHandler: (con, val) => {} 
+  }
+  // ...
+]
+```
+
+为了应对复杂源数据类型，从 `1.3.0` 开始 `key` 支持按属性路径检索。例如：
+
+``` js
 import { paging } from '@aidol/utils'
 
 const ori = [
   { a: { b: 'bar'} },
-  { a: { b: 'fooo'} },
   { a: { b: 'foo'} },
-  { a: { b: 'foo2'} }
+  { a: { b: 'foo1'} },
 ]
 
 const condition = [
-  { key: 'a.b', value: 'foo', fuzzy: true }
+  {
+    key: 'a.b',
+    value: 'foo'
+  }
 ]
 
-const { total, data } = paging(ori, {currentPage: 1, pageSize: 10}, condition)
-
-console.log(total, data)
+const { data } = paging(ori, {}, condition)
+console.log(data) // [{ a: { b: 'foo'} }]
 ```
 
 ## ws
@@ -61,6 +170,7 @@ console.log(total, data)
 import Vue from 'vue'
 import { ws } from '@aidol/utils' // WebSocket 服务
 
+// 一些常量可以放在环境变量中
 const open = process.env.VUE_APP_WS_OPEN
 const api = process.env.VUE_APP_WS_API
 const heart_interval = process.env.VUE_APP_WS_INTERVAL

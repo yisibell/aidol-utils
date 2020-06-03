@@ -2,3 +2,6 @@
 /test
 /demo
 .gitignore
+package-lock.json
+.babelrc.json
+rollup.config.js
