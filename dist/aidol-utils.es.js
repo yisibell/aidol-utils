@@ -347,28 +347,15 @@ var dom = {
 *@desc: WebSocket 通信服务
 */
 
-var WS_CONNECT_COUNT = 0; // ws 创建函数
-
 var createWebSocket = function createWebSocket(Vue, options) {
-  var WsBus = new Vue();
-  var WS = {};
-  var timer = null;
   var _options$heart_interv = options.heart_interval,
       heart_interval = _options$heart_interv === void 0 ? 50000 : _options$heart_interv,
       api = options.api,
       open = options.open,
       vue_emit_name = options.vue_emit_name;
-
-  var _ref = vue_emit_name || {},
-      _ref$onopen = _ref.onopen,
-      onopen = _ref$onopen === void 0 ? 'ws_open' : _ref$onopen,
-      _ref$onmessage = _ref.onmessage,
-      onmessage = _ref$onmessage === void 0 ? 'ws_message' : _ref$onmessage,
-      _ref$onerror = _ref.onerror,
-      onerror = _ref$onerror === void 0 ? 'ws_error' : _ref$onerror,
-      _ref$onclose = _ref.onclose,
-      onclose = _ref$onclose === void 0 ? 'ws_close' : _ref$onclose;
-
+  var WsBus = new Vue();
+  var WS = {};
+  var timer = null;
   var is_open_ws = true;
 
   try {
@@ -383,7 +370,7 @@ var createWebSocket = function createWebSocket(Vue, options) {
   WS.onopen = function (e) {
     console.log('ws connected...');
     WS_CONNECT_COUNT = 0;
-    WsBus.$emit(onopen, e);
+    WsBus.$emit(vue_emit_name.onopen, e);
     WS.send('heart');
     clearInterval(timer);
     timer = setInterval(function () {
@@ -394,19 +381,19 @@ var createWebSocket = function createWebSocket(Vue, options) {
 
   WS.onmessage = function (e) {
     var json_data = JSON.parse(e.data);
-    WsBus.$emit(onmessage, json_data);
+    WsBus.$emit(vue_emit_name.onmessage, json_data);
     options.onmessage && options.onmessage(json_data);
   };
 
   WS.onerror = function (err) {
-    WsBus.$emit(onerror, err);
+    WsBus.$emit(vue_emit_name.onerror, err);
     clearInterval(timer);
     options.onerror && options.onerror(err);
   };
 
   WS.onclose = function (e) {
     console.log('ws closed...');
-    WsBus.$emit(onclose, e);
+    WsBus.$emit(vue_emit_name.onclose, e);
     clearInterval(timer);
     options.onclose && options.onclose(e);
   };
@@ -415,18 +402,34 @@ var createWebSocket = function createWebSocket(Vue, options) {
     WS: WS,
     WsBus: WsBus
   };
+}; // 默认的 vue emit event name
+
+
+var defaultVueEmitName = function defaultVueEmitName() {
+  return {
+    onopen: 'ws_open',
+    onmessage: 'ws_message',
+    onerror: 'ws_error',
+    onclose: 'ws_close'
+  };
 }; // ws 安装函数
 
 
 var install = function install(Vue) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  if (!options.vue_emit_name) {
+    options.vue_emit_name = defaultVueEmitName();
+  }
+
   var $ws = createWebSocket(Vue, options);
   Vue.prototype.$ws = $ws;
   var WsBus = $ws.WsBus;
   var reconnect_limit = options.reconnect_limit,
       reconnect_limit_msg = options.reconnect_limit_msg,
-      reconnect_msg = options.reconnect_msg;
-  WsBus.$on('ws_close', function () {
+      reconnect_msg = options.reconnect_msg,
+      vue_emit_name = options.vue_emit_name;
+  WsBus.$on(vue_emit_name.onclose, function () {
     if (WS_CONNECT_COUNT > reconnect_limit) {
       var msg = reconnect_limit_msg || "The number of ws reconnections has exceeded ".concat(reconnect_limit, "\uFF0Cyou can refresh to reconnect the ws server!");
       console.warn(msg);
@@ -447,10 +450,15 @@ var install = function install(Vue) {
       install(Vue);
     }, 3000);
   });
-};
+}; // ws 重连计数
 
+
+var WS_CONNECT_COUNT = 0;
 var ws = {
-  install: install
+  install: install,
+  WS_CONNECT_COUNT: WS_CONNECT_COUNT,
+  defaultVueEmitName: defaultVueEmitName,
+  createWebSocket: createWebSocket
 };
 
 /**
