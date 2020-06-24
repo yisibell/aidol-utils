@@ -21,6 +21,12 @@ $ npm i @aidol/utils -S
 11. **get**  根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
 
 
+# Logs
+
+- 2020/6/24 (version 1.4.1)
+
+1. **BugFix** 修复了 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
+
 # Usage
 
 ## paging
@@ -176,28 +182,29 @@ const api = process.env.VUE_APP_WS_API
 const heart_interval = process.env.VUE_APP_WS_INTERVAL
 
 Vue.use(ws, {
-  // 是否开启 ws，默认关闭
+  // 是否开启 ws，默认关闭。
   open,
 
-  // ws 服务地址，必需
+  // ws 服务地址，必需。
   api,
 
-  // ws 心跳间隔，毫秒数，默认 50000
+  // ws 心跳间隔，毫秒数，默认 50000。
   heart_interval,
 
-  // 自动重连次数限制, Number, 默认 30
+  // 自动重连次数限制, Number, 默认 30。
   reconnect_limit: 30,
 
-  // 超出重连次数时的提示文本
+  // 超出重连次数时的提示文本。
   reconnect_limit_msg: '',
 
-  // 每次尝试重连 ws 时的提示文本, 也可以是一个函数，该函数会被传入当前的重连计数
+  // 每次尝试重连 ws 时的提示文本, 也可以是一个函数，该函数会被传入当前的重连计数。
   reconnect_msg: '',
 
-  // 在响应 ws 消息时，向 vue 实例注入的 $emit 事件名。
+  // 在响应 ws 消息时，向 vue 实例注入的 $emit 事件名，
+  // 一旦修改，则 4 个名称都需要修改。
   vue_emit_name: {
     onopen: 'ws_open',
-    onmessage: 'ws_message', // $on('ws_message')
+    onmessage: 'ws_message', // WsBus.$on('ws_message')
     onerror: 'ws_error',
     onclose: 'ws_close'
   },
@@ -210,13 +217,13 @@ Vue.use(ws, {
     // ...
   },
 
-  // WebSocket 连接时回调
+  // WebSocket 连接时回调。
   onopen(e) {},
 
-  // WebSocket 出错时回调
+  // WebSocket 出错时回调。
   onerror(err) {},
 
-  // WebSocket 关闭时回调
+  // WebSocket 关闭时回调。
   onclose(e) {}
 })
 ```

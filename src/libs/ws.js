@@ -5,16 +5,12 @@
 */
 import getType  from './getType'
 
-// ws 重连计数
-export let WS_CONNECT_COUNT = 0
-
 // ws 创建函数
 const createWebSocket = (Vue, options) => {
+  const { heart_interval = 50000, api, open, vue_emit_name } = options
   const WsBus = new Vue()
   let WS = {}
   let timer = null
-  const { heart_interval = 50000, api, open, vue_emit_name } = options
-  const { onopen = 'ws_open', onmessage = 'ws_message', onerror = 'ws_error', onclose = 'ws_close' } = vue_emit_name || {}
   let is_open_ws = true
 
   try {
@@ -24,12 +20,12 @@ const createWebSocket = (Vue, options) => {
     console.error('the open property should be a truly value.')
   }
 
-  if (is_open_ws) WS = new WebSocket(api)
+  if (is_open_ws) WS = new WebSocket(api);
 
   WS.onopen = function(e) {
     console.log('ws connected...')
     WS_CONNECT_COUNT = 0
-    WsBus.$emit(onopen, e)
+    WsBus.$emit(vue_emit_name.onopen, e)
     WS.send('heart')
     clearInterval(timer)
     timer = setInterval(() => {
@@ -40,19 +36,19 @@ const createWebSocket = (Vue, options) => {
 
   WS.onmessage = function(e) {
     const json_data = JSON.parse(e.data)
-    WsBus.$emit(onmessage, json_data)
+    WsBus.$emit(vue_emit_name.onmessage, json_data)
     options.onmessage && options.onmessage(json_data)
   }
 
   WS.onerror = function(err) {
-    WsBus.$emit(onerror, err)
+    WsBus.$emit(vue_emit_name.onerror, err)
     clearInterval(timer)
     options.onerror && options.onerror(err)
   }
 
   WS.onclose = function(e) {
     console.log('ws closed...')
-    WsBus.$emit(onclose, e)
+    WsBus.$emit(vue_emit_name.onclose, e)
     clearInterval(timer)
     options.onclose && options.onclose(e)
   }
@@ -60,14 +56,27 @@ const createWebSocket = (Vue, options) => {
   return { WS, WsBus }
 }
 
+// 默认的 vue emit event name
+const defaultVueEmitName = () => ({
+  onopen: 'ws_open',
+  onmessage: 'ws_message',
+  onerror: 'ws_error',
+  onclose: 'ws_close'
+})
+
 // ws 安装函数
 const install = (Vue, options = {}) => {
+  
+  if (!options.vue_emit_name) {
+    options.vue_emit_name = defaultVueEmitName()
+  }
+
   const $ws = createWebSocket(Vue, options)
   Vue.prototype.$ws = $ws
   const { WsBus } = $ws
-  const { reconnect_limit, reconnect_limit_msg, reconnect_msg } = options
+  const { reconnect_limit, reconnect_limit_msg, reconnect_msg, vue_emit_name } = options
 
-  WsBus.$on('ws_close', () => {
+  WsBus.$on(vue_emit_name.onclose, () => {
     if (WS_CONNECT_COUNT > reconnect_limit) {
       const msg = reconnect_limit_msg || `The number of ws reconnections has exceeded ${reconnect_limit}，you can refresh to reconnect the ws server!`
 
@@ -75,7 +84,7 @@ const install = (Vue, options = {}) => {
       return
     }
     setTimeout(() => {
-      ++WS_CONNECT_COUNT
+      ++WS_CONNECT_COUNT;
       let msg = `ws reconnect the ${WS_CONNECT_COUNT}th time ...`
 
       if (getType(reconnect_msg) === 'Function') {
@@ -90,4 +99,7 @@ const install = (Vue, options = {}) => {
   })
 }
 
-export default { install }
+// ws 重连计数
+export let WS_CONNECT_COUNT = 0
+
+export default { install, WS_CONNECT_COUNT, defaultVueEmitName, createWebSocket }

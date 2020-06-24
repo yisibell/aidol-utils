@@ -1,6 +1,6 @@
 {
   "name": "@aidol/utils",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "a javascript tool",
   "main": "dist/aidol-utils.umd.js",
   "module": "dist/aidol-utils.es.js",
