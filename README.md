@@ -23,9 +23,10 @@ $ npm i @aidol/utils -S
 
 # Logs
 
-- 2020/6/24 (version 1.4.1)
+- 2020/6/24 (version 1.4.2)
 
 1. **BugFix** 修复了 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
+
 
 # Usage
 
