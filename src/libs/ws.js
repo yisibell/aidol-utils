@@ -67,7 +67,7 @@ const defaultVueEmitName = () => ({
 // ws 安装函数
 const install = (Vue, options = {}) => {
   
-  if (!options.vue_emit_name) {
+  if (!options.vue_emit_name || JSON.stringify(options.vue_emit_name) === '{}') {
     options.vue_emit_name = defaultVueEmitName()
   }
 

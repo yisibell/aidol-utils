@@ -424,7 +424,7 @@
   var install = function install(Vue) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    if (!options.vue_emit_name) {
+    if (!options.vue_emit_name || JSON.stringify(options.vue_emit_name) === '{}') {
       options.vue_emit_name = defaultVueEmitName();
     }
 
