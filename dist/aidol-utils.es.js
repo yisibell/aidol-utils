@@ -342,10 +342,10 @@ var dom = {
 };
 
 /**
-*@author: hongwenqing
-*@date: 2019-12-3
-*@desc: WebSocket 通信服务
-*/
+ * WebSocket 通信服务
+ * @author: hongwenqing
+ * @date: 2019-12-3
+ */
 
 var createWebSocket = function createWebSocket(Vue, options) {
   var _options$heart_interv = options.heart_interval,
@@ -386,13 +386,16 @@ var createWebSocket = function createWebSocket(Vue, options) {
   };
 
   WS.onerror = function (err) {
+    console.log('ws error!');
+    WsBus.$emit('ws_reconnect', err);
     WsBus.$emit(vue_emit_name.onerror, err);
     clearInterval(timer);
     options.onerror && options.onerror(err);
   };
 
   WS.onclose = function (e) {
-    console.log('ws closed...');
+    console.log('ws closed!');
+    WsBus.$emit('ws_reconnect', e);
     WsBus.$emit(vue_emit_name.onclose, e);
     clearInterval(timer);
     options.onclose && options.onclose(e);
@@ -429,7 +432,7 @@ var install = function install(Vue) {
       reconnect_limit_msg = options.reconnect_limit_msg,
       reconnect_msg = options.reconnect_msg,
       vue_emit_name = options.vue_emit_name;
-  WsBus.$on(vue_emit_name.onclose, function () {
+  WsBus.$on('ws_reconnect', function () {
     if (WS_CONNECT_COUNT > reconnect_limit) {
       var msg = reconnect_limit_msg || "The number of ws reconnections has exceeded ".concat(reconnect_limit, "\uFF0Cyou can refresh to reconnect the ws server!");
       console.warn(msg);
@@ -447,7 +450,7 @@ var install = function install(Vue) {
       }
 
       console.log(msg);
-      install(Vue);
+      install(Vue, options);
     }, 3000);
   });
 }; // ws 重连计数

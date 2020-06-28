@@ -23,9 +23,13 @@ $ npm i @aidol/utils -S
 
 # Logs
 
+- 2020/6/28 (version 1.4.3)
+
+1. **BugFix:** 修复 `ws` 在意外断开时未正常重连问题。
+
 - 2020/6/24 (version 1.4.2)
 
-1. **BugFix** 修复了 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
+1. **BugFix:** 修复 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
 
 
 # Usage
