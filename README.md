@@ -6,6 +6,14 @@
 $ npm i @aidol/utils -S
 ```
 
+# build
+
+构建文件在 `dist` 文件夹下分为两个版本。
+
+`dist/aidol-utils.es.js` 为 `es Modules` 版本。
+
+`dist/aidol-utils.umd.js` 为 `umd` 版本，适合使用 `<script></script>` 标签的方式引用。
+
 # Features
 
 1. **paging**  分页工具函数。
@@ -19,9 +27,14 @@ $ npm i @aidol/utils -S
 9. **copyToClibboard** 复制文本至系统剪切板。
 10. **isEqualObject** 对象判等（以键-值为维度）。
 11. **get**  根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
+12. **watermark** 水印生成工具。
 
 
 # Logs
+
+- 2020/07/31 (version 1.5.0)
+
+1. 新增水印生成工具函数。
 
 - 2020/6/28 (version 1.4.3)
 
@@ -33,6 +46,74 @@ $ npm i @aidol/utils -S
 
 
 # Usage
+
+## watermark
+
+水印生成工具。
+
+### 使用方式
+
+``` js
+watermark(options)
+```
+
+#### 以 `<script>` 标签的方式引用
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>watermark demo</title>
+
+  <style>
+    #app {
+      height: 100vh;
+      width: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">hello watermark!</div>
+  <script src="./aidol-utils.umd.js"></script>
+
+  <script>
+    // AidolUtils 被暴露到 window
+    const { watermark } = AidolUtils
+
+    watermark({ content: 'build by elenh' })
+  </script>
+</body>
+</html>
+```
+
+#### 在有模块系统的项目中使用
+
+``` js
+import { watermark } from '@aidol/utils'
+watermark({ content: 'build by elenh' })
+```
+
+### 参数 options
+
+``` js
+{
+  container, // 水印插入的容器，可以是 Selector 选择器 或 Element 元素, 默认是 body 元素
+  width = '300px', // 水印文字的宽度
+  height = '300px', // 水印文字的高度
+  textAlign = 'center', // 水印文字在水平方向上如何放置
+  textBaseline = 'middle', // 水印文字基线
+  font = '20px Microsoft Yahei', // 字体
+  fillStyle = 'rgba(184, 184, 184, 0.3)', // 字体颜色
+  content = '@aidol/utils', // 水印文本内容
+  rotate = '30', // 水印旋转角度
+  zIndex = 1024, // 生成的水印块的 z-index 值
+  observe = true, // 是否监视 DOM 变更，防止用户恶意删除水印节点 dom
+  open = true // 是否开启
+}
+```
 
 ## paging
 

@@ -560,6 +560,90 @@
     }
   }
 
+  /**
+   * 水印生成工具
+   * 调用方式: canvasWaterMark({ content: 'QQMusicFE' })
+   * @author hongwenqing(elenh)
+   * @date 2020-07-27
+   * @param {}
+   * @return
+   */
+  function canvasWaterMark() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        container = _ref.container,
+        _ref$width = _ref.width,
+        width = _ref$width === void 0 ? '300px' : _ref$width,
+        _ref$height = _ref.height,
+        height = _ref$height === void 0 ? '300px' : _ref$height,
+        _ref$textAlign = _ref.textAlign,
+        textAlign = _ref$textAlign === void 0 ? 'center' : _ref$textAlign,
+        _ref$textBaseline = _ref.textBaseline,
+        textBaseline = _ref$textBaseline === void 0 ? 'middle' : _ref$textBaseline,
+        _ref$font = _ref.font,
+        font = _ref$font === void 0 ? '20px Microsoft Yahei' : _ref$font,
+        _ref$fillStyle = _ref.fillStyle,
+        fillStyle = _ref$fillStyle === void 0 ? 'rgba(184, 184, 184, 0.3)' : _ref$fillStyle,
+        _ref$content = _ref.content,
+        content = _ref$content === void 0 ? '@aidol/utils' : _ref$content,
+        _ref$rotate = _ref.rotate,
+        rotate = _ref$rotate === void 0 ? '30' : _ref$rotate,
+        _ref$zIndex = _ref.zIndex,
+        zIndex = _ref$zIndex === void 0 ? 1024 : _ref$zIndex,
+        _ref$observe = _ref.observe,
+        observe = _ref$observe === void 0 ? true : _ref$observe,
+        _ref$open = _ref.open,
+        open = _ref$open === void 0 ? true : _ref$open;
+
+    if (!open) return;
+    container = typeof container === 'string' ? document.querySelector(container) : document.body;
+    var args = arguments[0];
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('width', width);
+    canvas.setAttribute('height', height);
+    var ctx = canvas.getContext('2d');
+    ctx.textAlign = textAlign;
+    ctx.textBaseline = textBaseline;
+    ctx.font = font;
+    ctx.fillStyle = fillStyle;
+    ctx.rotate(Math.PI / 180 * rotate);
+    ctx.fillText(content, parseFloat(width) / 2, parseFloat(height) / 2);
+    var base64Url = canvas.toDataURL();
+
+    var __wm = document.querySelector('.__wm');
+
+    var watermarkDiv = __wm || document.createElement('div');
+
+    var styleStr = "\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; \n    z-index: ".concat(zIndex, ";\n    pointer-events: none;\n    background-repeat: repeat;\n    background-image: url('").concat(base64Url, "')");
+    watermarkDiv.setAttribute('style', styleStr);
+    watermarkDiv.classList.add('__wm');
+
+    if (!__wm) {
+      container.style.position = 'relative';
+      container.insertBefore(watermarkDiv, container.firstChild);
+    }
+
+    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+    if (observe && MutationObserver) {
+      var mo = new MutationObserver(function () {
+        var __wm = document.querySelector('.__wm'); // 只在__wm元素变动才重新调用 canvasWaterMark
+
+
+        if (__wm && __wm.getAttribute('style') !== styleStr || !__wm) {
+          // 避免一直触发
+          mo.disconnect();
+          mo = null;
+          canvasWaterMark(JSON.parse(JSON.stringify(args)));
+        }
+      });
+      mo.observe(container, {
+        attributes: true,
+        subtree: true,
+        childList: true
+      });
+    }
+  }
+
   exports.calc = calc$1;
   exports.cartesianOf = cartesianOf;
   exports.cartesianToTable = cartesianToTable;
@@ -570,6 +654,7 @@
   exports.getType = getType;
   exports.isEqualObject = isEqualObject;
   exports.paging = paging;
+  exports.watermark = canvasWaterMark;
   exports.ws = ws;
 
   Object.defineProperty(exports, '__esModule', { value: true });

@@ -9,6 +9,7 @@ import cartesianOf from './libs/cartesianOf'
 import cartesianToTable from './libs/cartesianToTable'
 import copyToClibboard from './libs/copyToClibboard'
 import get from './libs/get'
+import watermark from './libs/watermark'
 
 export {
   paging,
@@ -21,5 +22,6 @@ export {
   cartesianOf,
   cartesianToTable,
   copyToClibboard,
-  get
+  get,
+  watermark
 }
