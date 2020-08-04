@@ -111,6 +111,7 @@ watermark({ content: 'build by elenh' })
 | textAlign | `string` | 水印文字在水平方向上如何放置 | 'center' |
 | textBaseline | `string` | 水印文字基线 | 'middle' |
 | font | `string` | 字号，字体 | '18px Microsoft Yahei' |
+| lineHeight | `number` | 行高 | 25 |
 | fillStyle | `string` | 字体颜色 | 'rgba(184, 184, 184, 0.3)' |
 | content | `string` 或 `Array of string` | 水印文本内容，当类型是 `Array of string` 时，可做到水平居中换行的文本效果 | '@aidol/utils' |
 | rotate | `number` | 水印文本旋转角度 | 20 |
