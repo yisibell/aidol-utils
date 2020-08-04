@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>watermark demo</title>
-
   <style>
     #app {
-      height: 100vh;
-      width: 100vh;
+      height: 95vh;
     }
   </style>
 </head>
@@ -20,7 +18,8 @@
   <script>
     const { watermark } = AidolUtils
 
-    watermark({ container: '#app', content: 'build by elenh', observe: true})
+    watermark({ content: ['build by elenh', '2020-08-04 00:00:00'], width: '400px', height: '300px', lineHeight: 25, rotate: 20})
+    // watermark({ content: 'build by elenh 2020-08-04 00:00:00', width: '400px', height: '300px', lineHeight: 25, rotate: 20})
   </script>
 </body>
 </html>

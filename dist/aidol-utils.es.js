@@ -292,9 +292,17 @@ function getType(_val) {
 var dom = {
   // 设置样式
   css: function css(el, styles) {
-    for (var k in styles) {
-      if (styles.hasOwnProperty(k)) el.style[k] = styles[k];
-    }
+    // 设置
+    if (getType(styles) === 'Object') {
+      for (var k in styles) {
+        if (styles.hasOwnProperty(k)) el.style[k] = styles[k];
+      }
+
+      return;
+    } // 获取
+
+
+    return this.getStyleValue(el, styles);
   },
   //获取指定样式
   getStyleValue: function getStyleValue(elObj, attr) {
@@ -555,6 +563,37 @@ function copyToClipboard(text) {
 }
 
 /**
+ * 填充文本自动换行
+ * @param str: 要绘制的字符串
+ * @param ctx: canvas 对象
+ * @param initX: 绘制字符串起始x坐标
+ * @param initY: 绘制字符串起始y坐标
+ * @param lineHeight: 字行高，自己定义个值即可
+ */
+
+function fillTextAutoLine(str, canvas, initX, initY, lineHeight) {
+  var ctx = canvas.getContext('2d');
+  var lineWidth = 0;
+  var canvasWidth = canvas.width;
+  var lastSubStrIndex = 0;
+
+  for (var i = 0; i < str.length; i++) {
+    lineWidth += ctx.measureText(str[i]).width;
+
+    if (lineWidth > canvasWidth - initX) {
+      // 减去initX, 防止边界出现的问题
+      ctx.fillText(str.substring(lastSubStrIndex, i), initX, initY);
+      initY += lineHeight;
+      lineWidth = 0;
+      lastSubStrIndex = i;
+    }
+
+    if (i === str.length - 1) {
+      ctx.fillText(str.substring(lastSubStrIndex, i + 1), initX, initY);
+    }
+  }
+}
+/**
  * 水印生成工具
  * 调用方式: canvasWaterMark({ content: 'QQMusicFE' })
  * @author hongwenqing(elenh)
@@ -562,11 +601,14 @@ function copyToClipboard(text) {
  * @param {}
  * @return
  */
+
 function canvasWaterMark() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref.container,
+      _ref$content = _ref.content,
+      content = _ref$content === void 0 ? '@aidol/utils' : _ref$content,
       _ref$width = _ref.width,
-      width = _ref$width === void 0 ? '300px' : _ref$width,
+      width = _ref$width === void 0 ? '400px' : _ref$width,
       _ref$height = _ref.height,
       height = _ref$height === void 0 ? '300px' : _ref$height,
       _ref$textAlign = _ref.textAlign,
@@ -574,13 +616,13 @@ function canvasWaterMark() {
       _ref$textBaseline = _ref.textBaseline,
       textBaseline = _ref$textBaseline === void 0 ? 'middle' : _ref$textBaseline,
       _ref$font = _ref.font,
-      font = _ref$font === void 0 ? '20px Microsoft Yahei' : _ref$font,
+      font = _ref$font === void 0 ? '18px Microsoft Yahei' : _ref$font,
       _ref$fillStyle = _ref.fillStyle,
       fillStyle = _ref$fillStyle === void 0 ? 'rgba(184, 184, 184, 0.3)' : _ref$fillStyle,
-      _ref$content = _ref.content,
-      content = _ref$content === void 0 ? '@aidol/utils' : _ref$content,
+      _ref$lineHeight = _ref.lineHeight,
+      lineHeight = _ref$lineHeight === void 0 ? 25 : _ref$lineHeight,
       _ref$rotate = _ref.rotate,
-      rotate = _ref$rotate === void 0 ? '30' : _ref$rotate,
+      rotate = _ref$rotate === void 0 ? '20' : _ref$rotate,
       _ref$zIndex = _ref.zIndex,
       zIndex = _ref$zIndex === void 0 ? 1024 : _ref$zIndex,
       _ref$observe = _ref.observe,
@@ -600,7 +642,18 @@ function canvasWaterMark() {
   ctx.font = font;
   ctx.fillStyle = fillStyle;
   ctx.rotate(Math.PI / 180 * rotate);
-  ctx.fillText(content, parseFloat(width) / 2, parseFloat(height) / 2);
+  var x = parseFloat(width) / 2;
+  var y = parseFloat(height) / 2;
+
+  if (getType(content) === 'Array') {
+    content.forEach(function (v, i) {
+      fillTextAutoLine(v, canvas, x, y + lineHeight * i, lineHeight);
+    });
+  } else {
+    // 文本可自动换行 // ctx.fillText(content, parseFloat(width) / 2, parseFloat(height) / 2)
+    fillTextAutoLine(content, canvas, x, y, lineHeight);
+  }
+
   var base64Url = canvas.toDataURL();
 
   var __wm = document.querySelector('.__wm');

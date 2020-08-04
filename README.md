@@ -32,6 +32,10 @@ $ npm i @aidol/utils -S
 
 # Logs
 
+- 2020/08/04 (version 1.5.1)
+
+1. **watermark** 优化。文本支持自动换行，`content` 参数支持 `Array` 类型，其他参数默认值优化。
+
 - 2020/07/31 (version 1.5.0)
 
 1. 新增水印生成工具函数。
@@ -54,6 +58,9 @@ $ npm i @aidol/utils -S
 ### 使用方式
 
 ``` js
+// 导入
+import { watermark } from '@aidol/utils'
+// 调用, options 参数具体见下表
 watermark(options)
 ```
 
@@ -66,11 +73,9 @@ watermark(options)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>watermark demo</title>
-
   <style>
     #app {
-      height: 100vh;
-      width: 100vh;
+      height: 95vh;
     }
   </style>
 </head>
@@ -96,24 +101,23 @@ import { watermark } from '@aidol/utils'
 watermark({ content: 'build by elenh' })
 ```
 
-### 参数 options
+### options 参数
 
-``` js
-{
-  container, // 水印插入的容器，可以是 Selector 选择器 或 Element 元素, 默认是 body 元素
-  width = '300px', // 水印文字的宽度
-  height = '300px', // 水印文字的高度
-  textAlign = 'center', // 水印文字在水平方向上如何放置
-  textBaseline = 'middle', // 水印文字基线
-  font = '20px Microsoft Yahei', // 字体
-  fillStyle = 'rgba(184, 184, 184, 0.3)', // 字体颜色
-  content = '@aidol/utils', // 水印文本内容
-  rotate = '30', // 水印旋转角度
-  zIndex = 1024, // 生成的水印块的 z-index 值
-  observe = true, // 是否监视 DOM 变更，防止用户恶意删除水印节点 dom
-  open = true // 是否开启
-}
-```
+| 键名 | 类型 | 说明 | 默认值 |
+| :---: | :----: | :----: | :----: |
+| container | `Selector` 或 `Element` | 水印插入的容器 | `body` 元素 |
+| width | `string` | 生成水印 canvas 的 宽度 | '400px' |
+| height | `string` | 生成水印 canvas 的 高度 | '300px' |
+| textAlign | `string` | 水印文字在水平方向上如何放置 | 'center' |
+| textBaseline | `string` | 水印文字基线 | 'middle' |
+| font | `string` | 字号，字体 | '18px Microsoft Yahei' |
+| fillStyle | `string` | 字体颜色 | 'rgba(184, 184, 184, 0.3)' |
+| content | `string` 或 `Array of string` | 水印文本内容，当类型是 `Array of string` 时，可做到水平居中换行的文本效果 | '@aidol/utils' |
+| rotate | `number` | 水印文本旋转角度 | 20 |
+| zIndex | `number` | 生成的水印块的 z-index 值 | 1024 |
+| observe | `boolean` | 是否监视 DOM 变更，防止用户恶意删除水印节点 dom | true |
+| open | `boolean` | 是否开启水印 | true |
+
 
 ## paging
 

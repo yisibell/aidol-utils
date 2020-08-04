@@ -1,10 +1,20 @@
+import getType from './getType'
+
 const dom = {
   // 设置样式
   css(el, styles){
-    for ( let k in styles ){
-      if ( styles.hasOwnProperty(k) )
-      el.style[k] = styles[k]
+    // 设置
+    if (getType(styles) === 'Object') {
+      for ( let k in styles ){
+        if ( styles.hasOwnProperty(k) )
+        el.style[k] = styles[k]
+      }
+
+      return
     }
+    
+    // 获取
+    return this.getStyleValue(el, styles)
   },
 
   //获取指定样式
