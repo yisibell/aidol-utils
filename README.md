@@ -1,12 +1,14 @@
 # @aidol/utils
 
+一个一致性、模块化、高性能的 `JavaScript` 实用工具库，起源于 <a href="http://elenhong.gitee.io/aidol/" target="_blank"> **aidol** </a> 博客建站项目。
+
 # Installation
 
 ``` bash
 $ npm i @aidol/utils -S
 ```
 
-# build
+# Build
 
 构建文件在 `dist` 文件夹下分为两个版本。
 
