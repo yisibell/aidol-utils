@@ -213,7 +213,7 @@
     throw new Error("Unable to copy obj as type isn't supported " + obj.constructor.name);
   }
 
-  var calc$1 = {
+  var calc = {
     //加法
     add: function add(arg1, arg2) {
       var r1, r2, m;
@@ -286,7 +286,7 @@
 
       r1 = Number(arg1.toString().replace(".", ""));
       r2 = Number(arg2.toString().replace(".", ""));
-      return calc.mul(r1 / r2, Math.pow(10, t2 - t1));
+      return this.mul(r1 / r2, Math.pow(10, t2 - t1));
     }
   };
 
@@ -697,7 +697,7 @@
     }
   }
 
-  exports.calc = calc$1;
+  exports.calc = calc;
   exports.cartesianOf = cartesianOf;
   exports.cartesianToTable = cartesianToTable;
   exports.copyToClibboard = copyToClipboard;

@@ -32,21 +32,25 @@ $ npm i @aidol/utils -S
 
 # Logs
 
+- 2020/08/13 (version 1.5.2)
+
+1. **BugFix** 修复 `calc.div()` 方法调用问题。
+
 - 2020/08/04 (version 1.5.1)
 
-1. **watermark** 优化。文本支持自动换行，`content` 参数支持 `Array` 类型，其他参数默认值优化。
+1. **Upgrade** `watermark` 优化。文本支持自动换行，`content` 参数支持 `Array` 类型，其他参数默认值优化。
 
 - 2020/07/31 (version 1.5.0)
 
-1. 新增水印生成工具函数。
+1. **Feature** 新增水印生成工具函数。
 
 - 2020/6/28 (version 1.4.3)
 
-1. **BugFix:** 修复 `ws` 在意外断开时未正常重连问题。
+1. **BugFix** 修复 `ws` 在意外断开时未正常重连问题。
 
 - 2020/6/24 (version 1.4.2)
 
-1. **BugFix:** 修复 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
+1. **BugFix** 修复 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
 
 
 # Usage
