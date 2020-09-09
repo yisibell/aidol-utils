@@ -357,9 +357,30 @@
 
   /**
    * WebSocket 通信服务
-   * @author: hongwenqing
+   * @author: hongwenqing(elenh)
    * @date: 2019-12-3
    */
+
+  var WS_RECONNECT_EMIT_NAME = 'ws_reconnect'; // ws 重连触发间隔
+
+  var WS_RECONNECT_INTERVAL = 3000; // ws 重连计数
+
+  var WS_CONNECT_COUNT = 0; // 重连发布
+
+  var emitWsReconnect = function emitWsReconnect(WsBus, data) {
+    return WsBus.$emit(WS_RECONNECT_EMIT_NAME, data);
+  }; // 默认的 vue emit event name
+
+
+  var defaultVueEmitName = function defaultVueEmitName() {
+    return {
+      onopen: 'ws_open',
+      onmessage: 'ws_message',
+      onerror: 'ws_error',
+      onclose: 'ws_close'
+    };
+  }; // ws 创建函数
+
 
   var createWebSocket = function createWebSocket(Vue, options) {
     var _options$heart_interv = options.heart_interval,
@@ -401,7 +422,6 @@
 
     WS.onerror = function (err) {
       console.log('ws error!');
-      WsBus.$emit('ws_reconnect', err);
       WsBus.$emit(vue_emit_name.onerror, err);
       clearInterval(timer);
       options.onerror && options.onerror(err);
@@ -409,7 +429,7 @@
 
     WS.onclose = function (e) {
       console.log('ws closed!');
-      WsBus.$emit('ws_reconnect', e);
+      emitWsReconnect(WsBus, e);
       WsBus.$emit(vue_emit_name.onclose, e);
       clearInterval(timer);
       options.onclose && options.onclose(e);
@@ -418,16 +438,6 @@
     return {
       WS: WS,
       WsBus: WsBus
-    };
-  }; // 默认的 vue emit event name
-
-
-  var defaultVueEmitName = function defaultVueEmitName() {
-    return {
-      onopen: 'ws_open',
-      onmessage: 'ws_message',
-      onerror: 'ws_error',
-      onclose: 'ws_close'
     };
   }; // ws 安装函数
 
@@ -446,7 +456,7 @@
         reconnect_limit_msg = options.reconnect_limit_msg,
         reconnect_msg = options.reconnect_msg,
         vue_emit_name = options.vue_emit_name;
-    WsBus.$on('ws_reconnect', function () {
+    WsBus.$on(WS_RECONNECT_EMIT_NAME, function () {
       if (WS_CONNECT_COUNT > reconnect_limit) {
         var msg = reconnect_limit_msg || "The number of ws reconnections has exceeded ".concat(reconnect_limit, "\uFF0Cyou can refresh to reconnect the ws server!");
         console.warn(msg);
@@ -465,17 +475,18 @@
 
         console.log(msg);
         install(Vue, options);
-      }, 3000);
+      }, WS_RECONNECT_INTERVAL);
     });
-  }; // ws 重连计数
+  };
 
-
-  var WS_CONNECT_COUNT = 0;
   var ws = {
     install: install,
     WS_CONNECT_COUNT: WS_CONNECT_COUNT,
+    WS_RECONNECT_EMIT_NAME: WS_RECONNECT_EMIT_NAME,
+    WS_RECONNECT_INTERVAL: WS_RECONNECT_INTERVAL,
     defaultVueEmitName: defaultVueEmitName,
-    createWebSocket: createWebSocket
+    createWebSocket: createWebSocket,
+    emitWsReconnect: emitWsReconnect
   };
 
   /**

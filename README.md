@@ -34,6 +34,10 @@ $ npm i @aidol/utils -S
 
 # Logs
 
+- 2020/09/09 (version 1.5.3)
+
+1. **Upgrade** 优化 `ws` 重连的触发时机。
+
 - 2020/08/13 (version 1.5.2)
 
 1. **BugFix** 修复 `calc.div()` 方法调用问题。

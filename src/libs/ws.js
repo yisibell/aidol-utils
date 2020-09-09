@@ -1,9 +1,31 @@
 /**
  * WebSocket 通信服务
- * @author: hongwenqing
+ * @author: hongwenqing(elenh)
  * @date: 2019-12-3
  */
 import getType from './getType'
+
+// ws 重连事件名
+const WS_RECONNECT_EMIT_NAME = 'ws_reconnect'
+
+// ws 重连触发间隔
+const WS_RECONNECT_INTERVAL = 3000
+
+// ws 重连计数
+export let WS_CONNECT_COUNT = 0
+
+// 重连发布
+const emitWsReconnect = (WsBus, data) => {
+  return WsBus.$emit(WS_RECONNECT_EMIT_NAME, data)
+}
+
+// 默认的 vue emit event name
+const defaultVueEmitName = () => ({
+  onopen: 'ws_open',
+  onmessage: 'ws_message',
+  onerror: 'ws_error',
+  onclose: 'ws_close'
+})
 
 // ws 创建函数
 const createWebSocket = (Vue, options) => {
@@ -42,7 +64,6 @@ const createWebSocket = (Vue, options) => {
 
   WS.onerror = function(err) {
     console.log('ws error!')
-    WsBus.$emit('ws_reconnect', err)
     WsBus.$emit(vue_emit_name.onerror, err)
     clearInterval(timer)
     options.onerror && options.onerror(err)
@@ -50,7 +71,7 @@ const createWebSocket = (Vue, options) => {
 
   WS.onclose = function(e) {
     console.log('ws closed!')
-    WsBus.$emit('ws_reconnect', e)
+    emitWsReconnect(WsBus, e)
     WsBus.$emit(vue_emit_name.onclose, e)
     clearInterval(timer)
     options.onclose && options.onclose(e)
@@ -58,14 +79,6 @@ const createWebSocket = (Vue, options) => {
 
   return { WS, WsBus }
 }
-
-// 默认的 vue emit event name
-const defaultVueEmitName = () => ({
-  onopen: 'ws_open',
-  onmessage: 'ws_message',
-  onerror: 'ws_error',
-  onclose: 'ws_close'
-})
 
 // ws 安装函数
 const install = (Vue, options = {}) => {
@@ -79,7 +92,7 @@ const install = (Vue, options = {}) => {
   const { WsBus } = $ws
   const { reconnect_limit, reconnect_limit_msg, reconnect_msg, vue_emit_name } = options
 
-  WsBus.$on('ws_reconnect', () => {
+  WsBus.$on(WS_RECONNECT_EMIT_NAME, () => {
     if (WS_CONNECT_COUNT > reconnect_limit) {
       const msg = reconnect_limit_msg || `The number of ws reconnections has exceeded ${reconnect_limit}，you can refresh to reconnect the ws server!`
 
@@ -98,11 +111,16 @@ const install = (Vue, options = {}) => {
 
       console.log(msg)
       install(Vue, options)
-    }, 3000)
+    }, WS_RECONNECT_INTERVAL)
   })
 }
 
-// ws 重连计数
-export let WS_CONNECT_COUNT = 0
-
-export default { install, WS_CONNECT_COUNT, defaultVueEmitName, createWebSocket }
+export default { 
+  install,
+  WS_CONNECT_COUNT, 
+  WS_RECONNECT_EMIT_NAME,
+  WS_RECONNECT_INTERVAL, 
+  defaultVueEmitName, 
+  createWebSocket, 
+  emitWsReconnect 
+}
