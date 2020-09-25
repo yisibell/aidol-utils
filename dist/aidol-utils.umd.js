@@ -708,6 +708,175 @@
     }
   }
 
+  /**
+   * 吸顶指令
+   * @author hongwenqing(elenh)
+   * @date 2020-0925
+   * @param {} 
+   * @return 
+   */
+
+  var affix = {
+    bind: function bind(el) {
+      dom.css(el, {
+        width: '100%',
+        zIndex: '1994214'
+      });
+    },
+    inserted: function inserted(el) {
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          value = _ref.value;
+
+      var parseFloat = Number.parseFloat;
+      var prevEl = el.previousElementSibling,
+          // 上一兄弟节点
+      nextEl = el.nextElementSibling,
+          // 后一兄弟节点
+      nextElPaddingTop = parseFloat(dom.getStyleValue(nextEl, 'paddingTop')),
+          prevHeight = parseFloat(prevEl ? dom.getStyleValue(prevEl, 'height') : 0),
+          elHeight = parseFloat(dom.getStyleValue(el, 'height'));
+
+      el._ai_affix_directive__scroll_handle = function (e) {
+        var scroll_instance = window.pageYOffset || window.scrollY,
+            position = 'static',
+            paddingTop = nextElPaddingTop;
+
+        if (scroll_instance >= prevHeight) {
+          position = 'fixed';
+          paddingTop = elHeight + nextElPaddingTop + 'px';
+        } else {
+          position = 'static';
+          paddingTop = nextElPaddingTop + 'px';
+        }
+
+        dom.css(el, {
+          position: position,
+          left: '0px',
+          top: '0px'
+        });
+        dom.css(nextEl, {
+          paddingTop: paddingTop
+        });
+      };
+
+      window.addEventListener('scroll', el._ai_affix_directive__scroll_handle);
+    },
+    unbind: function unbind(el) {
+      window.removeEventListener('scroll', el._ai_affix_directive__scroll_handle);
+    }
+  };
+
+  /**
+   * 自动设置高度，对某 Dom 元素加上该指令后，会对其自动设置高度值，使得浏览器不出现纵向滚动条。
+   * @author hongwenqing(elenh)
+   * @date 2020-09-25
+   * @param {value} number 与视窗底部预留的间隙值
+   * @return 
+   */
+
+  var autoheight = {
+    bind: function bind(el) {
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref$value = _ref.value,
+          value = _ref$value === void 0 ? 20 : _ref$value;
+
+      el._ai_autoheight_directive = function () {
+        var w_h = window.innerHeight;
+        var con_el = el;
+        var con_offset = dom.offset(con_el);
+        con_el.style = "height:".concat(w_h - con_offset.top - value, "px; overflow-y:auto;");
+      };
+
+      window.addEventListener('resize', el._ai_autoheight_directive);
+    },
+    inserted: function inserted(el) {
+      el._ai_autoheight_directive();
+    },
+    componentUpdated: function componentUpdated(el) {
+      el._ai_autoheight_directive();
+    },
+    unbind: function unbind(el) {
+      window.removeEventListener('resize', el._ai_autoheight_directive);
+    }
+  };
+
+  /**
+   * 拖拽指令
+   * @author hongwenqing(elenh)
+   * @date 
+   * @param {value} boolean 是否启动拖拽
+   * @return 
+   */
+
+  var drag = {
+    inserted: function inserted(el) {
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref$value = _ref.value,
+          value = _ref$value === void 0 ? true : _ref$value;
+
+      el._ai_drag_directive__target_offset = dom.offset(el); // 初始偏移
+
+      el._ai_drag_directive__mousedown_handle = function (e) {
+        e.preventDefault();
+        e = e || window.event;
+        var drag_el = e.target;
+        var dist = e.clientY - drag_el.offsetTop;
+        var disl = e.clientX - drag_el.offsetLeft;
+
+        var mousemove_handle = function mousemove_handle(e) {
+          e = e || window.event;
+          var winW = document.documentElement.clientWidth || document.body.clientWidth;
+          var winH = document.documentElement.clientHeight || document.body.clientHeight;
+          var maxW = winW - drag_el.offsetWidth;
+          var maxH = winH - drag_el.offsetHeight;
+          var x = e.clientX - disl;
+          var y = e.clientY - dist;
+          if (x < 0) x = 0;else if (x > maxW) x = maxW;
+          if (y < 0) y = 0;else if (y > maxH) y = maxH;
+          drag_el.style.top = y + 'px';
+          drag_el.style.left = x + 'px';
+        };
+
+        var mouseup_handle = function mouseup_handle() {
+          // 鼠标弹起时卸载鼠标移动事件
+          document.removeEventListener('mousemove', mousemove_handle); // 同时卸载弹起事件
+
+          document.removeEventListener('mouseup', mouseup_handle);
+        };
+
+        document.addEventListener('mousemove', mousemove_handle);
+        document.addEventListener('mouseup', mouseup_handle);
+      };
+
+      el._ai_drag_directive__set_css = function (isFixed) {
+        dom.css(el, {
+          position: isFixed ? 'fixed' : 'static',
+          top: el._ai_drag_directive__target_offset.top + 'px',
+          left: el._ai_drag_directive__target_offset.left + 'px',
+          zIndex: 1024
+        });
+      };
+
+      el._ai_drag_directive__set_css(value);
+
+      el.addEventListener('mousedown', el._ai_drag_directive__mousedown_handle);
+    },
+    componentUpdated: function componentUpdated(el, _ref2) {
+      var value = _ref2.value;
+
+      el._ai_drag_directive__set_css(value);
+    },
+    unbind: function unbind(el) {
+      el.removeEventListener('mousedown', el._ai_drag_directive__mousedown_handle);
+    }
+  };
+
+  var index = {
+    affix: affix,
+    autoheight: autoheight,
+    drag: drag
+  };
+
   exports.calc = calc;
   exports.cartesianOf = cartesianOf;
   exports.cartesianToTable = cartesianToTable;
@@ -718,6 +887,7 @@
   exports.getType = getType;
   exports.isEqualObject = isEqualObject;
   exports.paging = paging;
+  exports.vueDirectives = index;
   exports.watermark = canvasWaterMark;
   exports.ws = ws;
 

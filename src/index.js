@@ -10,6 +10,7 @@ import cartesianToTable from './libs/cartesianToTable'
 import copyToClibboard from './libs/copyToClibboard'
 import get from './libs/get'
 import watermark from './libs/watermark'
+import vueDirectives from './directives'
 
 export {
   paging,
@@ -23,5 +24,6 @@ export {
   cartesianToTable,
   copyToClibboard,
   get,
-  watermark
+  watermark,
+  vueDirectives
 }

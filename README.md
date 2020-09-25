@@ -27,12 +27,17 @@ $ npm i @aidol/utils -S
 7. **cartesianOf** 笛卡尔积生成函数。
 8. **cartesianToTable** 笛卡尔积转换为 `Array of Object`。
 9. **copyToClibboard** 复制文本至系统剪切板。
-10. **isEqualObject** 对象判等（以键-值为维度）。
+10. **isEqualObject** 对象判等（以键-值为维度），不支持深度校验，为了更好的体验，建议使用 **lodash** 的 `_.isEqual()` 方法。
 11. **get**  根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
 12. **watermark** 水印生成工具。
+13. **vueDirectives** 指令集，其中包含了一些实用指令，例：`v-drag`, `v-affix`, `v-autoheight` 等。
 
 
 # Logs
+
+- 2020/09/25 (version 1.6.0)
+
+1. **Feature** 新增 `vueDirectives` 指令集模块，包含了有：`v-affix`, `v-drag`, `v-autoheight` 三个实用指令。
 
 - 2020/09/09 (version 1.5.3)
 
@@ -60,6 +65,130 @@ $ npm i @aidol/utils -S
 
 
 # Usage
+
+## vueDirectives
+
+该模块包含了一些 `vue directive`。
+
+安装指令的方式：
+
+1. 全局安装
+
+``` js
+// main.js
+
+import Vue from 'vue'
+import { vueDirectives } from '@aidol/utils'
+
+// 安装全部指令
+for (const k in vueDirectives) {
+  if (vueDirectives.hasOwnProperty(k)) {
+    Vue.directive(k, vueDirectives[k])
+  }
+}
+
+// or 仅安装某个指令
+Vue.directive('drag', vueDirectives.drag)
+
+// ...
+// new Vue({
+//   el: 'app'
+// })
+
+```
+
+2. 局部安装
+
+``` js
+import { vueDirectives } from '@aidol/utils'
+
+export default {
+  name: 'SomeComp',
+  directives: {
+    drag: vueDirectives,
+    // ...
+  }
+}
+```
+
+### v-drag
+
+拖拽指令。当给某 **dom** 元素加上 `v-drag` 指令后，该元素会变成可拖拽状态。
+
+#### 使用方式
+
+``` html
+<template>
+  <div class="some class" v-drag="draggable"> this is a box. </div>
+</template>
+```
+
+``` js
+export default {
+  data() {
+    return {
+      draggable: true
+    }
+  }
+}
+```
+
+#### 参数
+
+| 参数 | 类型 | 默认值 | 描述 |
+| :---: | :---: | :---: | :---: |
+| `draggable` | boolean | `true` | 控制是否可拖拽。 |
+
+### v-affix
+
+吸顶指令。可使用该指令实现元素吸顶效果。
+
+#### 使用方式
+
+``` html
+<template>
+  <div class="some-container">
+    <div class="some-class" v-affix> this is a affix element. </div>
+    <div class="next-element"></div>
+  </div>
+</template>
+```
+
+#### 参数
+
+暂无。
+
+### v-autoheight
+
+自动设置高度。有时，我们希望当前页面不出现滚动条，或者某个包裹元素不会产生滚动条。那么，你可能会需要该指令，使得应用该指令的元素可以正好占满剩余视窗高度，从而不出现纵向滚动条。
+
+#### 使用方式
+
+``` html
+<template>
+  <div class="some-container">
+    <div class="some-class"> this is a top element. </div>
+    <div class="next-element" v-autoheight="bottomGap"></div>
+  </div>
+</template>
+```
+
+``` js
+export default {
+  data() {
+    return {
+      bottomGap: 20
+    }
+  }
+}
+```
+
+#### 参数
+
+| 参数 | 类型 | 默认值 | 描述 |
+| :---: | :---: | :---: | :---: |
+| `bottomGap` | number | `20` | 预设距离底部的高度值。 |
+
 
 ## watermark
 
