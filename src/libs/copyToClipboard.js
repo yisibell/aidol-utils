@@ -1,6 +1,6 @@
 /**
  * 将指定文本复制到系统剪切板
- *@author hongwenqing
+ *@author hongwenqing(elenh)
  *@date 2020-05-25
  *@param {string} text
  */

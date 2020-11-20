@@ -553,7 +553,7 @@
 
   /**
    * 将指定文本复制到系统剪切板
-   *@author hongwenqing
+   *@author hongwenqing(elenh)
    *@date 2020-05-25
    *@param {string} text
    */
@@ -880,7 +880,7 @@
   exports.calc = calc;
   exports.cartesianOf = cartesianOf;
   exports.cartesianToTable = cartesianToTable;
-  exports.copyToClibboard = copyToClipboard;
+  exports.copyToClipboard = copyToClipboard;
   exports.deepClone = deepClone;
   exports.dom = dom;
   exports.get = get;

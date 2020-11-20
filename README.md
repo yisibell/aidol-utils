@@ -35,6 +35,10 @@ $ npm i @aidol/utils -S
 
 # Logs
 
+- 2020/11/20 (version 1.6.1)
+  
+1. **Refactor** `copyToClibboard` 改名为 `copyToClipboard`。
+
 - 2020/09/25 (version 1.6.0)
 
 1. **Feature** 新增 `vueDirectives` 指令集模块，包含了有：`v-affix`, `v-drag`, `v-autoheight` 三个实用指令。

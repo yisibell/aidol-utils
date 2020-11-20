@@ -7,7 +7,7 @@ import ws from './libs/ws'
 import isEqualObject from './libs/isEqualObject'
 import cartesianOf from './libs/cartesianOf'
 import cartesianToTable from './libs/cartesianToTable'
-import copyToClibboard from './libs/copyToClibboard'
+import copyToClipboard from './libs/copyToClipboard'
 import get from './libs/get'
 import watermark from './libs/watermark'
 import vueDirectives from './directives'
@@ -22,7 +22,7 @@ export {
   isEqualObject,
   cartesianOf,
   cartesianToTable,
-  copyToClibboard,
+  copyToClipboard,
   get,
   watermark,
   vueDirectives

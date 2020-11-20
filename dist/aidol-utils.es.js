@@ -547,7 +547,7 @@ function cartesianToTable(arr, cols) {
 
 /**
  * 将指定文本复制到系统剪切板
- *@author hongwenqing
+ *@author hongwenqing(elenh)
  *@date 2020-05-25
  *@param {string} text
  */
@@ -871,4 +871,4 @@ var index = {
   drag: drag
 };
 
-export { calc, cartesianOf, cartesianToTable, copyToClipboard as copyToClibboard, deepClone, dom, get, getType, isEqualObject, paging, index as vueDirectives, canvasWaterMark as watermark, ws };
+export { calc, cartesianOf, cartesianToTable, copyToClipboard, deepClone, dom, get, getType, isEqualObject, paging, index as vueDirectives, canvasWaterMark as watermark, ws };
