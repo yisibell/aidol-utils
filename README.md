@@ -2,6 +2,8 @@
 
 `vue` 实用指令集合。
 
+<a href="https://github.com/yisibell/aidol-utils/tree/1.x">1.x 文档</a>。
+
 # Installation
 
 ```bash
