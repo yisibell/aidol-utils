@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.AidolUtils = {}));
-}(this, (function (exports) { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.AidolUtils = {}));
+})(this, (function (exports) { 'use strict';
 
   /**
    * 根据 obj 对象的 path 路径获取值。 如果解析 value 是 undefined 会以 defaultValue 取代。
@@ -155,17 +155,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
 
   function deepClone(obj) {
@@ -353,140 +347,6 @@
         top: totalTop
       };
     }
-  };
-
-  /**
-   * WebSocket 通信服务
-   * @author: hongwenqing(elenh)
-   * @date: 2019-12-3
-   */
-
-  var WS_RECONNECT_EMIT_NAME = 'ws_reconnect'; // ws 重连触发间隔
-
-  var WS_RECONNECT_INTERVAL = 3000; // ws 重连计数
-
-  var WS_CONNECT_COUNT = 0; // 重连发布
-
-  var emitWsReconnect = function emitWsReconnect(WsBus, data) {
-    return WsBus.$emit(WS_RECONNECT_EMIT_NAME, data);
-  }; // 默认的 vue emit event name
-
-
-  var defaultVueEmitName = function defaultVueEmitName() {
-    return {
-      onopen: 'ws_open',
-      onmessage: 'ws_message',
-      onerror: 'ws_error',
-      onclose: 'ws_close'
-    };
-  }; // ws 创建函数
-
-
-  var createWebSocket = function createWebSocket(Vue, options) {
-    var _options$heart_interv = options.heart_interval,
-        heart_interval = _options$heart_interv === void 0 ? 50000 : _options$heart_interv,
-        api = options.api,
-        open = options.open,
-        vue_emit_name = options.vue_emit_name;
-    var WsBus = new Vue();
-    var WS = {};
-    var timer = null;
-    var is_open_ws = true;
-
-    try {
-      is_open_ws = getType(open) === 'String' ? JSON.parse(open) : open;
-    } catch (err) {
-      is_open_ws = true;
-      console.error('the open property should be a truly value.');
-    }
-
-    if (is_open_ws) WS = new WebSocket(api);
-
-    WS.onopen = function (e) {
-      console.log('ws connected...');
-      WS_CONNECT_COUNT = 0;
-      WsBus.$emit(vue_emit_name.onopen, e);
-      WS.send('heart');
-      clearInterval(timer);
-      timer = setInterval(function () {
-        WS.send('heart');
-      }, Number.parseInt(heart_interval));
-      options.onopen && options.onopen(e);
-    };
-
-    WS.onmessage = function (e) {
-      var json_data = JSON.parse(e.data);
-      WsBus.$emit(vue_emit_name.onmessage, json_data);
-      options.onmessage && options.onmessage(json_data);
-    };
-
-    WS.onerror = function (err) {
-      console.log('ws error!');
-      WsBus.$emit(vue_emit_name.onerror, err);
-      clearInterval(timer);
-      options.onerror && options.onerror(err);
-    };
-
-    WS.onclose = function (e) {
-      console.log('ws closed!');
-      emitWsReconnect(WsBus, e);
-      WsBus.$emit(vue_emit_name.onclose, e);
-      clearInterval(timer);
-      options.onclose && options.onclose(e);
-    };
-
-    return {
-      WS: WS,
-      WsBus: WsBus
-    };
-  }; // ws 安装函数
-
-
-  var install = function install(Vue) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    if (!options.vue_emit_name || JSON.stringify(options.vue_emit_name) === '{}') {
-      options.vue_emit_name = defaultVueEmitName();
-    }
-
-    var $ws = createWebSocket(Vue, options);
-    Vue.prototype.$ws = $ws;
-    var WsBus = $ws.WsBus;
-    var reconnect_limit = options.reconnect_limit,
-        reconnect_limit_msg = options.reconnect_limit_msg,
-        reconnect_msg = options.reconnect_msg,
-        vue_emit_name = options.vue_emit_name;
-    WsBus.$on(WS_RECONNECT_EMIT_NAME, function () {
-      if (WS_CONNECT_COUNT > reconnect_limit) {
-        var msg = reconnect_limit_msg || "The number of ws reconnections has exceeded ".concat(reconnect_limit, "\uFF0Cyou can refresh to reconnect the ws server!");
-        console.warn(msg);
-        return;
-      }
-
-      setTimeout(function () {
-        ++WS_CONNECT_COUNT;
-        var msg = "ws reconnect the ".concat(WS_CONNECT_COUNT, "th time ...");
-
-        if (getType(reconnect_msg) === 'Function') {
-          msg = reconnect_msg(WS_CONNECT_COUNT);
-        } else if (reconnect_msg) {
-          msg = reconnect_msg;
-        }
-
-        console.log(msg);
-        install(Vue, options);
-      }, WS_RECONNECT_INTERVAL);
-    });
-  };
-
-  var ws = {
-    install: install,
-    WS_CONNECT_COUNT: WS_CONNECT_COUNT,
-    WS_RECONNECT_EMIT_NAME: WS_RECONNECT_EMIT_NAME,
-    WS_RECONNECT_INTERVAL: WS_RECONNECT_INTERVAL,
-    defaultVueEmitName: defaultVueEmitName,
-    createWebSocket: createWebSocket,
-    emitWsReconnect: emitWsReconnect
   };
 
   /**
@@ -724,8 +584,8 @@
       });
     },
     inserted: function inserted(el) {
-      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          value = _ref.value;
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+          _ref.value;
 
       var parseFloat = Number.parseFloat;
       var prevEl = el.previousElementSibling,
@@ -889,8 +749,7 @@
   exports.paging = paging;
   exports.vueDirectives = index;
   exports.watermark = canvasWaterMark;
-  exports.ws = ws;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

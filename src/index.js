@@ -3,7 +3,6 @@ import deepClone from './libs/deepClone'
 import calc from './libs/calc'
 import getType from './libs/getType'
 import dom from './libs/dom'
-import ws from './libs/ws'
 import isEqualObject from './libs/isEqualObject'
 import cartesianOf from './libs/cartesianOf'
 import cartesianToTable from './libs/cartesianToTable'
@@ -18,7 +17,6 @@ export {
   calc,
   getType,
   dom,
-  ws,
   isEqualObject,
   cartesianOf,
   cartesianToTable,

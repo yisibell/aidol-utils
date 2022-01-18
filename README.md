@@ -1,11 +1,14 @@
 # @aidol/utils
 
-一个一致性、模块化、高性能的 `JavaScript` 实用工具库，起源于 <a href="http://elenhong.gitee.io/aidol/" target="_blank"> **aidol** </a> 博客建站项目。
+`vue` 实用指令集合。
 
 # Installation
 
-``` bash
-$ npm i @aidol/utils -S
+```bash
+# yarn
+$ yarn add @aidol/utils
+# npm
+$ npm i @aidol/utils
 ```
 
 # Build
@@ -18,55 +21,18 @@ $ npm i @aidol/utils -S
 
 # Features
 
-1. **paging**  分页工具函数。
+1. **paging** 分页工具函数。
 2. **deepClone** 引用类型深拷贝。
 3. **calc** 避免 `javascript` 小数计算精度丢失工具类。
 4. **getType** 数据类型获取函数。
 5. **dom** 实用 `Dom` 操作工具类。
-6. **ws** 适用于 `vue` 项目的 `WebSocket` 客户端服务。
-7. **cartesianOf** 笛卡尔积生成函数。
-8. **cartesianToTable** 笛卡尔积转换为 `Array of Object`。
-9. **copyToClibboard** 复制文本至系统剪切板。
-10. **isEqualObject** 对象判等（以键-值为维度），不支持深度校验，为了更好的体验，建议使用 **lodash** 的 `_.isEqual()` 方法。
-11. **get**  根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
-12. **watermark** 水印生成工具。
-13. **vueDirectives** 指令集，其中包含了一些实用指令，例：`v-drag`, `v-affix`, `v-autoheight` 等。
-
-
-# Logs
-
-- 2020/11/20 (version 1.6.1)
-  
-1. **Refactor** `copyToClibboard` 改名为 `copyToClipboard`。
-
-- 2020/09/25 (version 1.6.0)
-
-1. **Feature** 新增 `vueDirectives` 指令集模块，包含了有：`v-affix`, `v-drag`, `v-autoheight` 三个实用指令。
-
-- 2020/09/09 (version 1.5.3)
-
-1. **Upgrade** 优化 `ws` 重连的触发时机。
-
-- 2020/08/13 (version 1.5.2)
-
-1. **BugFix** 修复 `calc.div()` 方法调用问题。
-
-- 2020/08/04 (version 1.5.1)
-
-1. **Upgrade** `watermark` 优化。文本支持自动换行，`content` 参数支持 `Array` 类型，其他参数默认值优化。
-
-- 2020/07/31 (version 1.5.0)
-
-1. **Feature** 新增水印生成工具函数。
-
-- 2020/6/28 (version 1.4.3)
-
-1. **BugFix** 修复 `ws` 在意外断开时未正常重连问题。
-
-- 2020/6/24 (version 1.4.2)
-
-1. **BugFix** 修复 `ws` 模块中 `vue_emit_name` 参数的一些潜在问题。
-
+6. **cartesianOf** 笛卡尔积生成函数。
+7. **cartesianToTable** 笛卡尔积转换为 `Array of Object`。
+8. **copyToClibboard** 复制文本至系统剪切板。
+9. **isEqualObject** 对象判等（以键-值为维度），不支持深度校验，为了更好的体验，建议使用 **lodash** 的 `_.isEqual()` 方法。
+10. **get** 根据 `object` 对象的 `path` 路径获取值, 功能等同于 **lodash** 的 `_.get()` 方法。
+11. **watermark** 水印生成工具。
+12. **vueDirectives** 指令集，其中包含了一些实用指令，例：`v-drag`, `v-affix`, `v-autoheight` 等。
 
 # Usage
 
@@ -78,7 +44,7 @@ $ npm i @aidol/utils -S
 
 1. 全局安装
 
-``` js
+```js
 // main.js
 
 import Vue from 'vue'
@@ -98,12 +64,11 @@ Vue.directive('drag', vueDirectives.drag)
 // new Vue({
 //   el: 'app'
 // })
-
 ```
 
 2. 局部安装
 
-``` js
+```js
 import { vueDirectives } from '@aidol/utils'
 
 export default {
@@ -111,7 +76,7 @@ export default {
   directives: {
     drag: vueDirectives,
     // ...
-  }
+  },
 }
 ```
 
@@ -121,26 +86,26 @@ export default {
 
 #### 使用方式
 
-``` html
+```html
 <template>
-  <div class="some class" v-drag="draggable"> this is a box. </div>
+  <div class="some class" v-drag="draggable">this is a box.</div>
 </template>
 ```
 
-``` js
+```js
 export default {
   data() {
     return {
-      draggable: true
+      draggable: true,
     }
-  }
+  },
 }
 ```
 
 #### 参数
 
-| 参数 | 类型 | 默认值 | 描述 |
-| :---: | :---: | :---: | :---: |
+|    参数     |  类型   | 默认值 |       描述       |
+| :---------: | :-----: | :----: | :--------------: |
 | `draggable` | boolean | `true` | 控制是否可拖拽。 |
 
 ### v-affix
@@ -149,10 +114,10 @@ export default {
 
 #### 使用方式
 
-``` html
+```html
 <template>
   <div class="some-container">
-    <div class="some-class" v-affix> this is a affix element. </div>
+    <div class="some-class" v-affix>this is a affix element.</div>
     <div class="next-element"></div>
   </div>
 </template>
@@ -168,31 +133,30 @@ export default {
 
 #### 使用方式
 
-``` html
+```html
 <template>
   <div class="some-container">
-    <div class="some-class"> this is a top element. </div>
+    <div class="some-class">this is a top element.</div>
     <div class="next-element" v-autoheight="bottomGap"></div>
   </div>
 </template>
 ```
 
-``` js
+```js
 export default {
   data() {
     return {
-      bottomGap: 20
+      bottomGap: 20,
     }
-  }
+  },
 }
 ```
 
 #### 参数
 
-| 参数 | 类型 | 默认值 | 描述 |
-| :---: | :---: | :---: | :---: |
-| `bottomGap` | number | `20` | 预设距离底部的高度值。 |
-
+|    参数     |  类型  | 默认值 |          描述          |
+| :---------: | :----: | :----: | :--------------------: |
+| `bottomGap` | number |  `20`  | 预设距离底部的高度值。 |
 
 ## watermark
 
@@ -200,7 +164,7 @@ export default {
 
 ### 使用方式
 
-``` js
+```js
 // 导入
 import { watermark } from '@aidol/utils'
 // 调用, options 参数具体见下表
@@ -209,59 +173,57 @@ watermark(options)
 
 #### 以 `<script>` 标签的方式引用
 
-``` html
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>watermark demo</title>
-  <style>
-    #app {
-      height: 95vh;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>watermark demo</title>
+    <style>
+      #app {
+        height: 95vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">hello watermark!</div>
+    <script src="./aidol-utils.umd.js"></script>
 
-  <div id="app">hello watermark!</div>
-  <script src="./aidol-utils.umd.js"></script>
+    <script>
+      // AidolUtils 被暴露到 window
+      const { watermark } = AidolUtils
 
-  <script>
-    // AidolUtils 被暴露到 window
-    const { watermark } = AidolUtils
-
-    watermark({ content: 'build by elenh' })
-  </script>
-</body>
+      watermark({ content: 'build by elenh' })
+    </script>
+  </body>
 </html>
 ```
 
 #### 在有模块系统的项目中使用
 
-``` js
+```js
 import { watermark } from '@aidol/utils'
 watermark({ content: 'build by elenh' })
 ```
 
 ### options 参数
 
-| 键名 | 类型 | 说明 | 默认值 |
-| :---: | :----: | :----: | :----: |
-| container | `Selector` 或 `Element` | 水印插入的容器 | `body` 元素 |
-| width | `string` | 生成水印 canvas 的 宽度 | '400px' |
-| height | `string` | 生成水印 canvas 的 高度 | '300px' |
-| textAlign | `string` | 水印文字在水平方向上如何放置 | 'center' |
-| textBaseline | `string` | 水印文字基线 | 'middle' |
-| font | `string` | 字号，字体 | '18px Microsoft Yahei' |
-| lineHeight | `number` | 行高 | 25 |
-| fillStyle | `string` | 字体颜色 | 'rgba(184, 184, 184, 0.3)' |
-| content | `string` 或 `Array of string` | 水印文本内容，当类型是 `Array of string` 时，可做到水平居中换行的文本效果 | '@aidol/utils' |
-| rotate | `number` | 水印文本旋转角度 | 20 |
-| zIndex | `number` | 生成的水印块的 z-index 值 | 1024 |
-| observe | `boolean` | 是否监视 DOM 变更，防止用户恶意删除水印节点 dom | true |
-| open | `boolean` | 是否开启水印 | true |
-
+|     键名     |             类型              |                                   说明                                    |           默认值           |
+| :----------: | :---------------------------: | :-----------------------------------------------------------------------: | :------------------------: |
+|  container   |    `Selector` 或 `Element`    |                              水印插入的容器                               |        `body` 元素         |
+|    width     |           `string`            |                          生成水印 canvas 的 宽度                          |          '400px'           |
+|    height    |           `string`            |                          生成水印 canvas 的 高度                          |          '300px'           |
+|  textAlign   |           `string`            |                       水印文字在水平方向上如何放置                        |          'center'          |
+| textBaseline |           `string`            |                               水印文字基线                                |          'middle'          |
+|     font     |           `string`            |                                字号，字体                                 |   '18px Microsoft Yahei'   |
+|  lineHeight  |           `number`            |                                   行高                                    |             25             |
+|  fillStyle   |           `string`            |                                 字体颜色                                  | 'rgba(184, 184, 184, 0.3)' |
+|   content    | `string` 或 `Array of string` | 水印文本内容，当类型是 `Array of string` 时，可做到水平居中换行的文本效果 |       '@aidol/utils'       |
+|    rotate    |           `number`            |                             水印文本旋转角度                              |             20             |
+|    zIndex    |           `number`            |                         生成的水印块的 z-index 值                         |            1024            |
+|   observe    |           `boolean`           |              是否监视 DOM 变更，防止用户恶意删除水印节点 dom              |            true            |
+|     open     |           `boolean`           |                               是否开启水印                                |            true            |
 
 ## paging
 
@@ -273,7 +235,7 @@ watermark({ content: 'build by elenh' })
 
 2. **options {object}**： 配置（不启用分页时可不传，或传入 `{}`）。
 
-``` js
+```js
 {
   currentPage: 1, // 当前页码
   pageSize: 10 // 每页条数
@@ -286,13 +248,13 @@ watermark({ content: 'build by elenh' })
 
 **{object}**：返回一个查询结果对象。
 
-``` js
+```js
 {
   total, // 查询结果总条数
-  originTotal, // 源数据总条数
-  data, // 查询结果
-  currentPage, // 当前页码
-  pageSize // 当前页数据条数
+    originTotal, // 源数据总条数
+    data, // 查询结果
+    currentPage, // 当前页码
+    pageSize // 当前页数据条数
 }
 ```
 
@@ -300,21 +262,14 @@ watermark({ content: 'build by elenh' })
 
 1. 不启用分页，按条件查询。
 
-``` js
+```js
 import { paging } from '@aidol/utils'
 
 // 源数据
-const ori = [
-  { a: 'bar' },
-  { a: 'bar2' },
-  { a: 'foo' },
-  { a: 'foo2' }
-]
+const ori = [{ a: 'bar' }, { a: 'bar2' }, { a: 'foo' }, { a: 'foo2' }]
 
 // 查询条件
-const condition = [
-  { key: 'a', value: 'foo' }
-]
+const condition = [{ key: 'a', value: 'foo' }]
 
 const { total, data } = paging(ori, {}, condition)
 
@@ -324,7 +279,7 @@ console.log(data) // 查询结果, [{ a: 'foo' }]
 
 2. 启用分页，按条件查询。
 
-``` js
+```js
 import { paging } from '@aidol/utils'
 
 // 源数据
@@ -336,13 +291,11 @@ const ori = [
   { a: 'foo2' },
   { a: 'foo2' },
   { a: 'foo' },
-  { a: 'foo' }
+  { a: 'foo' },
 ]
 
 // 查询条件
-const condition = [
-  { key: 'a', value: 'foo' }
-]
+const condition = [{ key: 'a', value: 'foo' }]
 
 const { total, data } = paging(ori, { currentPage: 1, pageSize: 2 }, condition)
 
@@ -354,138 +307,40 @@ console.log(data) // 查询结果, [{ a: 'foo' }, { a: 'foo' }]
 
 `condition` 作为 `paging` 的第三个参数，表示查询条件，可选。
 
-``` js
+```js
 const condition = [
   {
     // 检索字段、属性键名（必需）。
-    key: 'a', 
+    key: 'a',
     // 当前检索值（必需）。
-    value: '', 
+    value: '',
     // 是否启用模糊搜索
     // 当前启用该字段时，将不会区分大小写，只要被检索值中存在 value 即被匹配成功。
-    fuzzy: false, 
+    fuzzy: false,
     // 是否对该字段启用日期范围检索
     // 设置了该属性为 true 后，value 的格式需为 [2019-02-13, 2020-02-14]，两个值可以被 new Date() 解析即可。
-    daterange: false, 
+    daterange: false,
     // 自定义检索方法，该方法被传入两个参数：`con`（当前条件字段值，即 value ），`val`（源数据中对应字段值）。
-    validHandler: (con, val) => {} 
-  }
+    validHandler: (con, val) => {},
+  },
   // ...
 ]
 ```
 
 为了应对复杂源数据类型，从 `1.3.0` 开始 `key` 支持按属性路径检索。例如：
 
-``` js
+```js
 import { paging } from '@aidol/utils'
 
-const ori = [
-  { a: { b: 'bar'} },
-  { a: { b: 'foo'} },
-  { a: { b: 'foo1'} },
-]
+const ori = [{ a: { b: 'bar' } }, { a: { b: 'foo' } }, { a: { b: 'foo1' } }]
 
 const condition = [
   {
     key: 'a.b',
-    value: 'foo'
-  }
+    value: 'foo',
+  },
 ]
 
 const { data } = paging(ori, {}, condition)
 console.log(data) // [{ a: { b: 'foo'} }]
 ```
-
-## ws
-
-适用于 **vue** 项目的 **WebSocket** 客户端服务。
-
-使用方式：
-
-为了规范化，请在你的项目中创建 `src/service/ws.js` 文件，该文件中用于存放该项目的 `WebSocket` 服务逻辑。
-
-``` js
-// src/service/ws.js
-
-import Vue from 'vue'
-import { ws } from '@aidol/utils' // WebSocket 服务
-
-// 一些常量可以放在环境变量中
-const open = process.env.VUE_APP_WS_OPEN
-const api = process.env.VUE_APP_WS_API
-const heart_interval = process.env.VUE_APP_WS_INTERVAL
-
-Vue.use(ws, {
-  // 是否开启 ws，默认关闭。
-  open,
-
-  // ws 服务地址，必需。
-  api,
-
-  // ws 心跳间隔，毫秒数，默认 50000。
-  heart_interval,
-
-  // 自动重连次数限制, Number, 默认 30。
-  reconnect_limit: 30,
-
-  // 超出重连次数时的提示文本。
-  reconnect_limit_msg: '',
-
-  // 每次尝试重连 ws 时的提示文本, 也可以是一个函数，该函数会被传入当前的重连计数。
-  reconnect_msg: '',
-
-  // 在响应 ws 消息时，向 vue 实例注入的 $emit 事件名，
-  // 一旦修改，则 4 个名称都需要修改。
-  vue_emit_name: {
-    onopen: 'ws_open',
-    onmessage: 'ws_message', // WsBus.$on('ws_message')
-    onerror: 'ws_error',
-    onclose: 'ws_close'
-  },
-
-  // 接收 message 时回调
-  onmessage(data) {
-    console.log(data)
-    // 在这里你可以写一些特定的业务逻辑
-    // 比如调用一个绑定客户端的接口，使得后端服务知道当前使用 WebSocket 服务的用户是谁。
-    // ...
-  },
-
-  // WebSocket 连接时回调。
-  onopen(e) {},
-
-  // WebSocket 出错时回调。
-  onerror(err) {},
-
-  // WebSocket 关闭时回调。
-  onclose(e) {}
-})
-```
-
-然后在 `main.js` 中导入 `src/service/ws.js`。
-
-``` js
-// main.js
-import '@/service/ws'
-
-// ...
-```
-
-这样，**WebSocket** 就会正常注册，并且在所有 **vue** 组件实例中你都可以接收到来自 **WebSocket** 服务发送的消息，像这样：
-
-``` vue
-<script>
-export default {
-  mounted() {
-    const { WsBus, WS } = this.$ws
-    // 当前 WebSocket 实例
-    console.log(WS)
-    WsBus.$on('ws_message', (data) => {
-      // 请保证后端发送的是 JSON 格式的数据，因为我们会在方法内部通过 `JSON.parse` 方法解析它。
-      console.log(data)
-    })
-  }
-}
-</script>
-```
-

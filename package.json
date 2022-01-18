@@ -2,13 +2,16 @@
   "name": "@aidol/utils",
   "version": "2.0.0",
   "description": "a javascript tool",
-  "main": "dist/aidol-utils.umd.js",
-  "module": "dist/aidol-utils.es.js",
+  "main": "dist/aidol-utils.cjs.js",
+  "module": "dist/aidol-utils.esm.js",
+  "browser": "dist/aidol-utils.umd.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "build": "rollup -c"
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "release": "npm publish --access=public"
   },
   "repository": {
     "type": "git",
@@ -17,7 +20,8 @@
   "keywords": [
     "aidol",
     "aidol-utils",
-    "tool"
+    "tool",
+    "vue-directive"
   ],
   "author": {
     "email": "yisiwings@163.com",
@@ -33,6 +37,7 @@
     "@babel/preset-env": "^7.10.2",
     "@rollup/plugin-babel": "^5.0.2",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "cz-conventional-changelog": "^3.3.0",
     "rollup": "^2.12.1"
   }
 }

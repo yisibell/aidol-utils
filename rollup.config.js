@@ -1,18 +1,24 @@
 import resolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
+import pkg from './package.json'
 
 export default {
   input: 'src/index.js',
   output: [
     {
-      file: 'dist/aidol-utils.umd.js',
+      file: pkg.main,
+      format: 'cjs'
+    },
+    {
+      file: pkg.module,
+      format: 'es'
+    },
+    {
+      file: pkg.browser,
       format: 'umd',
       name: 'AidolUtils'
     },
-    {
-      file: 'dist/aidol-utils.es.js',
-      format: 'es'
-    }
+   
   ],
   plugins: [
     resolve(),
