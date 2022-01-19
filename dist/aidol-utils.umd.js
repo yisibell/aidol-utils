@@ -4,154 +4,6 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.AidolUtils = {}));
 })(this, (function (exports) { 'use strict';
 
-  /**
-   * 根据 obj 对象的 path 路径获取值。 如果解析 value 是 undefined 会以 defaultValue 取代。
-   * @author hongwenqing(elenh)
-   * @date 2020-05-29
-   * @param {object} obj 要检索的对象
-   * @param {string | array} path 要获取属性的路径
-   * @param {any} defaultValue 如果解析值是 undefined ，这值会被返回。
-   * @return {any} 返回解析的值
-   */
-  function get (obj, path, defaultValue) {
-    var res = obj;
-    var path_arr = []; // 生成属性路径数组
-
-    if (Array.isArray(path)) {
-      path_arr = path;
-    } else {
-      var keys = [];
-
-      try {
-        keys = path.split('.');
-      } catch (err) {
-        throw new Error('path must be a String.');
-      }
-
-      keys.forEach(function (str) {
-        var arr = [];
-        var first_prop = str.match(/^(\w+)\[?/);
-        var index_arr = str.match(/\[(\d)\]+/g);
-
-        if (Array.isArray(first_prop) && first_prop.length > 1) {
-          arr.push(first_prop[1]);
-        }
-
-        if (Array.isArray(index_arr)) {
-          arr = arr.concat(index_arr.map(function (v) {
-            var num = v.match(/\[(\d)+\]/);
-            return Number.parseInt(num[1]);
-          }));
-        }
-
-        path_arr = path_arr.concat(arr);
-      });
-    } // 生成结果
-
-
-    path_arr.forEach(function (key) {
-      res = res[key];
-    });
-    return typeof res === 'undefined' ? defaultValue : res;
-  }
-
-  /**
-   * 分页器
-   *@author hongwenqing(elenh)
-   *@date 2019-02-14
-   *@param {Array of Object} origin 源数据
-   *@param {Object} currentPage 当前页, pageSize 每页条数
-   *@param {Array of Object} condition 过滤条件
-   *@return {Object} total: 总条数 data: 当前页数据
-   */
-
-  var paging = function paging(origin) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-      currentPage: 0,
-      pageSize: 0
-    },
-        currentPage = _ref.currentPage,
-        pageSize = _ref.pageSize;
-
-    var condition = arguments.length > 2 ? arguments[2] : undefined;
-    origin = !origin ? [] : origin;
-    var start_index = (currentPage - 1) * pageSize,
-        end_index = start_index + pageSize,
-        originTotal = origin.length,
-        // origin total data
-    data = [],
-        total = 0,
-        isAllConditionNull = !condition || condition.every(function (v) {
-      return v.value === '' || v.value === null;
-    }); // 是否存在有效过滤条件
-    // get all origin data when all condition is null character string.
-
-    if (isAllConditionNull) {
-      data = currentPage && pageSize ? origin.slice(start_index, end_index) : origin;
-      total = origin.length;
-    } else {
-      // filter data
-      var filteredArr = origin.filter(function (ori) {
-        var validMap = condition.reduce(function (o, v) {
-          o[v.key] = true;
-          return o;
-        }, {});
-
-        var _loop = function _loop(k) {
-          if (validMap.hasOwnProperty(k)) {
-            var curr_condition_o = condition.find(function (v) {
-              return v.key === k;
-            }); // 某条件信息对象
-
-            var curr_condition_o_val = curr_condition_o.value;
-            var ori_val = get(ori, k);
-            /* 匹配方式 S */
-
-            if (curr_condition_o.daterange) {
-              // 1.日期范围
-              var start = +new Date(curr_condition_o_val ? curr_condition_o_val[0] : 0);
-              var end = +new Date(curr_condition_o_val ? curr_condition_o_val[1] : 0);
-              var now = +new Date(ori_val);
-              validMap[k] = start <= now && end >= now || !start;
-            } else if (curr_condition_o.validHandler) {
-              // 2.自定义校验
-              validMap[k] = curr_condition_o.validHandler(curr_condition_o_val, ori_val);
-            } else {
-              // 3.模糊、全匹配
-              var fuzzy_ori_val = ori_val.toLowerCase ? ori_val.toLowerCase() : ori_val;
-              var fuzzy_curr_condition_o_val = curr_condition_o_val.toLowerCase ? curr_condition_o_val.toLowerCase() : curr_condition_o_val;
-              validMap[k] = (curr_condition_o.fuzzy ? fuzzy_ori_val.search(fuzzy_curr_condition_o_val) !== -1 : ori_val == curr_condition_o_val) || curr_condition_o_val == '';
-            }
-            /* 匹配方式 E */
-
-          }
-        };
-
-        for (var k in validMap) {
-          _loop(k);
-        }
-
-        for (var _k in validMap) {
-          if (!validMap[_k]) return false;
-        }
-
-        return true;
-      }); // pagination data from condition filter
-
-      data = currentPage && pageSize ? filteredArr.slice(start_index, end_index) : filteredArr; // pagination total data
-
-      total = filteredArr.length;
-    }
-
-    return {
-      total: total,
-      originTotal: originTotal,
-      data: data,
-      currentPage: currentPage,
-      pageSize: pageSize
-    };
-  };
-
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
@@ -440,6 +292,57 @@
   }
 
   /**
+   * 根据 obj 对象的 path 路径获取值。 如果解析 value 是 undefined 会以 defaultValue 取代。
+   * @author hongwenqing(elenh)
+   * @date 2020-05-29
+   * @param {object} obj 要检索的对象
+   * @param {string | array} path 要获取属性的路径
+   * @param {any} defaultValue 如果解析值是 undefined ，这值会被返回。
+   * @return {any} 返回解析的值
+   */
+  function get (obj, path, defaultValue) {
+    var res = obj;
+    var path_arr = []; // 生成属性路径数组
+
+    if (Array.isArray(path)) {
+      path_arr = path;
+    } else {
+      var keys = [];
+
+      try {
+        keys = path.split('.');
+      } catch (err) {
+        throw new Error('path must be a String.');
+      }
+
+      keys.forEach(function (str) {
+        var arr = [];
+        var first_prop = str.match(/^(\w+)\[?/);
+        var index_arr = str.match(/\[(\d)\]+/g);
+
+        if (Array.isArray(first_prop) && first_prop.length > 1) {
+          arr.push(first_prop[1]);
+        }
+
+        if (Array.isArray(index_arr)) {
+          arr = arr.concat(index_arr.map(function (v) {
+            var num = v.match(/\[(\d)+\]/);
+            return Number.parseInt(num[1]);
+          }));
+        }
+
+        path_arr = path_arr.concat(arr);
+      });
+    } // 生成结果
+
+
+    path_arr.forEach(function (key) {
+      res = res[key];
+    });
+    return typeof res === 'undefined' ? defaultValue : res;
+  }
+
+  /**
    * 吸顶指令
    * @author hongwenqing(elenh)
    * @date 2020-0925
@@ -617,7 +520,6 @@
   exports.get = get;
   exports.getType = getType;
   exports.isEqualObject = isEqualObject;
-  exports.paging = paging;
   exports.vueDirectives = index;
 
   Object.defineProperty(exports, '__esModule', { value: true });

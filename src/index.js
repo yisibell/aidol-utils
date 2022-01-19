@@ -1,4 +1,4 @@
-import paging from './libs/paging'
+
 import deepClone from './libs/deepClone'
 import calc from './libs/calc'
 import getType from './libs/getType'
@@ -11,7 +11,6 @@ import get from './libs/get'
 import vueDirectives from './directives'
 
 export {
-  paging,
   deepClone,
   calc,
   getType,
