@@ -8,7 +8,6 @@ import cartesianOf from './libs/cartesianOf'
 import cartesianToTable from './libs/cartesianToTable'
 import copyToClipboard from './libs/copyToClipboard'
 import get from './libs/get'
-import watermark from './libs/watermark'
 import vueDirectives from './directives'
 
 export {
@@ -22,6 +21,5 @@ export {
   cartesianToTable,
   copyToClipboard,
   get,
-  watermark,
   vueDirectives
 }
