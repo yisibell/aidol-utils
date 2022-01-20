@@ -4,6 +4,12 @@
 
 <a href="https://github.com/yisibell/aidol-utils/tree/1.x">1.x 文档</a>。
 
+# WARNING
+
+- `ws` 模块已移至 <a href="https://github.com/yisibell/myws" target="_blank">myws</a>
+- `watermark` 模块已移至 <a href="https://github.com/yisibell/mymark" target="_blank">mymark</a>
+- `paging` 模块已移至 <a href="https://github.com/yisibell/pagein" target="_blank">pagein</a>
+
 # Installation
 
 ```bash
