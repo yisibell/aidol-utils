@@ -71,7 +71,9 @@ import { vueDirectives } from '@aidol/utils'
 export default {
   name: 'SomeComp',
   directives: {
-    drag: vueDirectives,
+    drag: vueDirectives.drag,
+    affix: vueDirectives.affix,
+    autoheight: vueDirectives.autoheight,
     // ...
   },
 }
