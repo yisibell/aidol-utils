@@ -1,12 +1,13 @@
 # @aidol/utils
 
 `vue` 实用指令集合。
+## Docs
 
-<a href="https://github.com/yisibell/aidol-utils/tree/1.x" target="_blank">1.x 文档</a>。
+1. <a href="https://github.com/yisibell/aidol-utils/tree/1.x" target="_blank">1.x 文档</a>。
 
 ## Migration Guide
 
-`@aidol/utils 2.x` 已发布，可按该 <a href="https://github.com/yisibell/aidol-utils/MIGRATION-GUIDE.md" target="_blank">迁移指南</a> 进行迁移。
+`@aidol/utils 2.x` 已发布，可按该 <a href="https://github.com/yisibell/aidol-utils/blob/master/MIGRATION-GUIDE.md" target="_blank">迁移指南</a> 进行迁移。
 
 # Installation
 
