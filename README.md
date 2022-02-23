@@ -2,13 +2,11 @@
 
 `vue` 实用指令集合。
 
-<a href="https://github.com/yisibell/aidol-utils/tree/1.x">1.x 文档</a>。
+<a href="https://github.com/yisibell/aidol-utils/tree/1.x" target="_blank">1.x 文档</a>。
 
-# WARNING
+## Migration Guide
 
-- `ws` 模块已移至 <a href="https://github.com/yisibell/myws" target="_blank">myws</a>
-- `watermark` 模块已移至 <a href="https://github.com/yisibell/mymark" target="_blank">mymark</a>
-- `paging` 模块已移至 <a href="https://github.com/yisibell/pagein" target="_blank">pagein</a>
+`@aidol/utils 2.x` 已发布，可按该 <a href="https://github.com/yisibell/aidol-utils/MIGRATION-GUIDE.md" target="_blank">迁移指南</a> 进行迁移。
 
 # Installation
 
